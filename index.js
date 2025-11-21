@@ -31,7 +31,7 @@ const { chain } = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
 
 let { say } = cfonts
-console.log(chalk.magentaBright('\n🌱 Iniciando...'))
+console.log(chalk.magentaBright('\n🌱 Iniciando...\n'));
 
 say('Shadow-Bot', {
   font: 'block',
@@ -44,8 +44,10 @@ say('Made by fede Uchiha', {
   font: 'console',
   align: 'center',
   colors: ['cyan', 'magenta', 'yellow']
-protoType()
-serialize()
+});
+
+protoType();
+serialize();
 
 if (!existsSync("./tmp")) {
   mkdirSync("./tmp");
