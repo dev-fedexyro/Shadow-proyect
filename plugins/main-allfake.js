@@ -21,8 +21,8 @@ global.año = d.toLocaleDateString('es', { year: 'numeric' })
 global.tiempo = d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
 global.hora = d.toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
-var canal = 'https://whatsapp.com/channel/'
-var comunidad = 'https://chat.whatsapp.com/'
+var canal = 'https://whatsapp.com/channel/0029Vb75ZmrC6ZvbQguXiZ2e'
+var comunidad = 'https://chat.whatsapp.com/DlwujVOQQYwGlBJPhOseKB'
 var git = 'https://github.com/dev-fedexyro'
 var github = 'https://github.com/dev-fedexyro/Shadow-xyz'
 var correo = 'federicoxyzz@gmail.com'
