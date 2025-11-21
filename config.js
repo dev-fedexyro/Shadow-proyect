@@ -34,9 +34,9 @@ global.catalogo = fs.readFileSync('./storage/catalogo.png')
 
 // ===
 
-global.group = "https://chat.whatsapp.com/"
-global.community = "https://chat.whatsapp.com/"
-global.channel = "https://whatsapp.com/channel/"
+global.group = "https://chat.whatsapp.com/DlwujVOQQYwGlBJPhOseKB"
+global.community = "https://chat.whatsapp.com/DlwujVOQQYwGlBJPhOseKB"
+global.channel = "https://whatsapp.com/channel/0029Vb75ZmrC6ZvbQguXiZ2e"
 global.github = "https://github.com/dev-fedexyro/Shadow-xyz"
 global.gmail = "federicoxyzz@gmail.com"
 global.ch = {
