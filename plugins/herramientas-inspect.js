@@ -238,10 +238,10 @@ let handler = async (m, { conn, command, usedPrefix, args, text, groupMetadata, 
     }
 }
 
-handler.tags = ['tools']
+handler.tags = ['herramientas']
 handler.help = ['inspect <enlace>', 'inspeccionar <enlace>']
 handler.command = ['inspect', 'inspeccionar']
-handler.register = true
+
 export default handler 
 
 function formatDate(n, locale = "es", includeTime = true) {
