@@ -15,7 +15,7 @@ const handler = async (m, { conn, text, usedPrefix}) => {
       const data = res.data?.data;
 
       if (!data?.play) {
-        return conn.reply(m.chat, '_🍂 Enlace inválido o sin contenido descargable._', m);
+        return conn.reply(m.chat, '\`\`\`🍂 Enlace inválido o sin contenido descargable.\`\`\`', m);
 }
 
       const { title, duration, author, created_at, type, images, music, play} = data;
@@ -63,7 +63,7 @@ const handler = async (m, { conn, text, usedPrefix}) => {
       const results = res.data?.data?.videos?.filter(v => v.play) || [];
 
       if (results.length < 2) {
-        return conn.reply(m.chat, '🍇 Se requieren al menos 2 resultados válidos con contenido.', m);
+        return conn.reply(m.chat, '\`\`\`🍇 Se requieren al menos 2 resultados válidos con contenido.\`\`\`', m);
 }
 
       const medias = results.slice(0, 10).map(v => ({
@@ -84,18 +84,18 @@ const handler = async (m, { conn, text, usedPrefix}) => {
 };
 
 function createCaption(title, author, duration, created_at = '') {
-  return `\`\`\`🌱 Título:\`\`\` \`${title || 'No disponible'}\`\n` +
-         `\`\`\`🌵 Autor:\`\`\` ${author?.nickname || author?.unique_id || 'No disponible'}\n` +
-         `\`\`\`🍇 Duración:\`\`\` ${duration || 'No disponible'}s` +
-         (created_at? `\n🌱 \`\`\`Creado:\`\`\` ${created_at}`: '') +
-         `\n\`\`\`🌵 Música:\`\`\` [${author?.nickname || 'No disponible'}] original sound - ${author?.unique_id || 'unknown'}`;
+  return `🌱 *_Título:_* \`${title || 'No disponible'}\`\n` +
+         `🌵 *_Autor:_* ${author?.nickname || author?.unique_id || 'No disponible'}\n` +
+         `🍇 *_Duración:_* ${duration || 'No disponible'}s` +
+         (created_at? `\n🌱 *_Creado:_* ${created_at}`: '') +
+         `\n🌵 *_Música:_* [${author?.nickname || 'No disponible'}] original sound - ${author?.unique_id || 'unknown'}`;
 }
 
 function createSearchCaption(data) {
-  return `\`\`\`🌱 Título:\`\`\` ${data.title || 'No disponible'}\n\n` +
-         `\`\`\`🌵 Autor:\`\`\` ${data.author?.nickname || 'Desconocido'} ${data.author?.unique_id? `@${data.author.unique_id}`: ''}\n` +
-         `\`\`\`🍇 Duración:\`\`\` ${data.duration || 'No disponible'}\n` +
-         `\`\`\`🌱 Música:\`\`\` ${data.music?.title || `[${data.author?.nickname || 'No disponible'}] original sound - ${data.author?.unique_id || 'unknown'}`}`;
+  return `🌱 *_Título:_* ${data.title || 'No disponible'}\n\n` +
+         `🌵 *_Autor:_* ${data.author?.nickname || 'Desconocido'} ${data.author?.unique_id? `@${data.author.unique_id}`: ''}\n` +
+         `🍇 *_Duración:_* ${data.duration || 'No disponible'}\n` +
+         `🌱 *_Música:_* ${data.music?.title || `[${data.author?.nickname || 'No disponible'}] original sound - ${data.author?.unique_id || 'unknown'}`}`;
 }
 
 handler.help = ['tiktoks', 'tt', 'tts', 'tiktoks'];
