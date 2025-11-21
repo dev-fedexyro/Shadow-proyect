@@ -77,7 +77,7 @@ let handler = async (m, { conn}) => {
     let menuText = infoUser + '\n\n';
 
     for (let [tag, cmds] of Object.entries(categories)) {
-        let tagName = tags[tag] || `𓂂𓏸  𐅹੭੭   *${tag.toUpperCase()}* 🌾 ᦡᦡ`;
+        let tagName = tags[tag] || `𓂂𓏸  𐅹੭੭   * ${tag.toUpperCase()}* 🌾 ᦡᦡ`;
         menuText += `${tagName}\n${cmds.map(cmd => `➩ ${cmd}`).join('\n')}\n\n`;
 }
 
