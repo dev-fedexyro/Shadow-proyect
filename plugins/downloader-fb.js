@@ -26,8 +26,8 @@ async function fbdl(url) {
 
 let handler = async (m, { conn, text}) => {
   if (!text) {
-    return conn.reply(m.chat, `\`\`\`🌱 Uso correcto:\n/fb <link de Facebook>...\`\`\`\n\n\`\`\`🌵 Ejemplo:\n/fb https://www.facebook.com/share/v/...\`\`\``);
-}
+    return conn.reply(m.chat, `\`\`\`🌱Uso correcto:\n/fb <link de Facebook>\`\`\`\n\n🌵Ejemplo:\n/fb https://www.facebook.com/share/v/.\`\`\``, m, global.rcanal);
+            }
 
   await conn.reply(m.chat, '\`\`\`🌵 Descargando video, espera...\`\`\`');
 
