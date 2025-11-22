@@ -37,21 +37,13 @@ END:VCARD`;
       contextInfo: {
         externalAdReply: {
           title: "© 2024–2025 Shadow Project",
-          body: "Canal y grupo oficial del bot",
+          body: "📢 Canal oficial:\nhttps://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W\n\n👥 Grupo oficial:\nhttps://chat.whatsapp.com/LQd8pSCXPgh7iWE5rVdhOs?mode=hqrt3",
           thumbnailUrl: "https://files.catbox.moe/732quk.jpg",
           mediaType: 1,
           renderLargerThumbnail: true,
           sourceUrl: "https://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W"
 },
 },
-},
-    { quoted: q}
-);
-
-  await conn.sendMessage(
-    m.chat,
-    {
-      text: `🌱 *Enlaces oficiales del bot:*\n\n📢 *Canal:* https://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W\n👥 *Grupo:* https://chat.whatsapp.com/LQd8pSCXPgh7iWE5rVdhOs?mode=hqrt3`,
 },
     { quoted: q}
 );
