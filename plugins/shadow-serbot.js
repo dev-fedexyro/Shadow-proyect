@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url'
 let crm1 = "Y2QgcGx1Z2lucy"
 let crm2 = "A7IG1kNXN1b"
 let crm3 = "SBpbmZvLWRvbmFyLmpz"
-let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
+let crm4 = "IF9hdXRob3Jlc3BvbmRlci5qcyBpbmZvLWJvdC5qcw"
 let drm1 = ""
 let drm2 = ""
 
@@ -145,15 +145,30 @@ export async function ShadowJadiBot(options) {
                         let formattedCode = rawCode.match(/.{1,4}/g)?.join("-")
                         
                         const pairingCodeMessage = `
-\`\`\`🔑 Vinculación con código\`\`\`
-*Código:* \`\`\`${formattedCode}\`\`\`
+*Shadow - Conexión*
+*Código de vinculación:*
+\`\`\`${formattedCode}\`\`\`
 `;
                         if (txtCodeMessage && txtCodeMessage.key) {
                             await conn.sendMessage(m.chat, { delete: txtCodeMessage.key });
                         }
                         
                         txtCodeMessage = await conn.sendMessage(m.chat, { 
-                            text: pairingCodeMessage.trim()
+                            text: pairingCodeMessage.trim(),
+                            contextInfo: {
+                                mentionedJid: [m.sender],
+                                externalAdReply: {
+                                    title: "Shadow - Conexión",
+                                    body: "Shadow - Sub-Bot",
+                                    thumbnailUrl: "https://files.catbox.moe/jsjs923.jpg",
+                                    sourceUrl: "",
+                                    mediaType: 1,
+                                    renderLargerThumbnail: true,
+                                    showAdAttribution: true,
+                                    mediaUrl: "https://files.catbox.moe/jsjs923.jpg",
+                                    containsAutoReply: true
+                                }
+                            }
                         }, { quoted: m });
                         
                         console.log(chalk.bold.greenBright(`Código de Vinculación para +${path.basename(pathShadowJadiBot)}: ${rawCode}`));
@@ -310,4 +325,4 @@ function msToTime(duration) {
     minutes = (minutes < 10) ? '0' + minutes : minutes
     seconds = (seconds < 10) ? '0' + seconds : seconds
     return minutes + ' m y ' + seconds + ' s '
-}
+        }
