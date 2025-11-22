@@ -69,7 +69,7 @@ let handler = async (m, { conn}) => {
 
 ╰┈□ 𝖨𝖭𝖥𝖮-𝖡𝖮𝖳
 ❐ _Tiempo activo:_ ${uptime}
-❐ _Prefijo:_ \`\`\`[ / ]\`\`\`
+❐ _Prefijo:_ \`\`\`[ / . ]\`\`\`
 ❐ _Grupos activos:_ ${groupsCount}
 ❐ _Fecha:_ ${new Date().toLocaleString('es-ES')}
 `.trim();
