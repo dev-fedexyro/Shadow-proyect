@@ -1,6 +1,5 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 import './config.js'
-import cfonts from 'cfonts'
 import { createRequire } from 'module'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { platform } from 'process'
@@ -30,29 +29,6 @@ import NodeCache from 'node-cache'
 const { CONNECTING } = ws
 const { chain } = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-
-let { say } = cfonts
-console.log(chalk.magentaBright('\n🦧 Iniciando...\n'));
-
-say('Shadow - Bot', {
-  font: 'block',
-  align: 'center',
-  gradient: ['white', 'grey'],
-  transition: true
-});
-
-say('Made by fede Uchiha', {
-  font: 'console',
-  align: 'center',
-  colors: ['cyan', 'magenta', 'yellow']
-});
-
-protoType();
-serialize();
-
-if (!existsSync("./tmp")) {
-  mkdirSync("./tmp");
-}
 
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
 return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString()
