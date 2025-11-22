@@ -7,6 +7,7 @@
 import https from 'https'
 import baileys, { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 import axios from 'axios'
+import { Buffer } from 'buffer'
 
 async function sendAlbumMessage(conn, jid, medias, options = {}) {
   if (typeof jid !== 'string') throw new TypeError('jid debe ser string')
@@ -27,7 +28,7 @@ async function sendAlbumMessage(conn, jid, medias, options = {}) {
             remoteJid: options.quoted.key.remoteJid,
             fromMe: options.quoted.key.fromMe,
             stanzaId: options.quoted.key.id,
-            participant: options.quoted.key.participant || options.quoted.key.remoteJid,
+            participant: options.quoted.quoted.key.participant || options.quoted.key.remoteJid,
             quotedMessage: options.quoted.message
           }
         } : {})
@@ -126,64 +127,27 @@ const searchPinterestAPI = async (query, limit) => {
   }
 }
 
-async function sendCustomPedido(m, conn, texto) {
-  try {
-    const img = 'https://files.catbox.moe/ahpkd5.jpg'
-    const res = await axios.get(img, { responseType: 'arraybuffer' })
-    const imgBuffer = Buffer.from(res.data)
-
-    const orderMessage = {
-      orderId: 'FAKE-' + Date.now(),
-      thumbnail: imgBuffer,
-      itemCount: 1,
-      status: 1,
-      surface: 1,
-      message: texto,
-      orderTitle: 'Pinterest Bot',
-      token: null,
-      sellerJid: null,
-      totalAmount1000: '0',
-      totalCurrencyCode: 'GTQ',
-      contextInfo: {
-        externalAdReply: {
-          title: botname,
-          body: '',
-          thumbnailUrl: img,
-          mediaType: 1,
-          renderLargerThumbnail: true
-        }
-      }
-    }
-
-    const msg = generateWAMessageFromContent(m.chat, { orderMessage }, { quoted: m })
-    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
-  } catch (err) {
-    console.error(err)
-    m.reply('⚠️ Error enviando el pedido.', m)
-  }
-}
-
-let handler = async (m, { conn, args, rcanal }) => {
+let handler = async (m, { conn, args }) => {
   try {
     const text = args.join(' ')
-    if (!text) return sendCustomPedido(m, conn, '*ⓘ* `Por favor, ingresa lo que deseas buscar en Pinterest.`')
+    if (!text) return m.reply('\`\`\`ⓘ Por favor, ingresa lo que deseas buscar en Pinterest.\`\`\`')
 
     const parts = text.split(',')
     const query = parts[0].trim()
     const limit = parts[1] ? Math.min(parseInt(parts[1].trim()), 12) : 12
 
     const res = await searchPinterestAPI(query, limit)
-    if (!res.length) return sendCustomPedido(m, conn, `⚠️ No se encontraron resultados para "${query}".`)
+    if (!res.length) return m.reply(`⚠️ No se encontraron resultados para "${query}".`)
 
     const medias = res.map(url => ({ type: 'image', data: { url } }))
     await sendAlbumMessage(conn, m.chat, medias, { caption: `✨ Resultados de Pinterest - "${query}"`, quoted: m })
 
   } catch (e) {
-    return sendCustomPedido(m, conn, `⚠️ Se produjo un error:\n${e.message}`)
+    return m.reply(`⚠️ Se produjo un error:\n${e.message}`)
   }
 }
 
-handler.help = ['pin'];
+handler.help = ['pin', 'pinterest'];
 handler.tags = ['buscador']
 handler.command = ['pin', 'pinterest'];
 export default handler
