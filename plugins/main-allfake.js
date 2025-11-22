@@ -29,7 +29,7 @@ var correo = 'federicoxyzz@gmail.com'
 global.redes = [canal, comunidad, git, github, correo].getRandom()
 
 let nombre = m.pushName || 'Anónimo'
-let botname = global.botName || 'Տհαժօա - Ⴆօէ'
+let botname = global.botName || 'Sʜᴀᴅᴏᴡ - Bᴏᴛ'
 
 global.packsticker = `
 🌱 Usuario: ${nombre}
