@@ -9,7 +9,7 @@ const videoUrls = [
 
 const handler = async (m, { conn, command}) => {
     if (command === 'shadow') {
-        const caption = '👻 Vídeo de Shadow';
+        const caption = '\`\`\`👻 Vídeo de Shadow\`\`\`';
         const randomUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
 
         try {
