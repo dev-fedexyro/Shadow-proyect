@@ -4,15 +4,15 @@ import fetch from 'node-fetch';
 const getBuffer = async (url) => {
     try {
         const res = await fetch(url);
-        if (res.status!== 200) {
-            console.error(`Error al descargar la imagen: Código de estado ${res.status}`);
+        if (res.status !== 200) {
+            console.warn(`[getBuffer] Error al descargar la imagen: Código de estado ${res.status} para ${url}`);
             return null;
-}
+        }
         return await res.buffer();
-} catch (e) {
-        console.error("Error en getBuffer:", e);
+    } catch (e) {
+        console.error("[getBuffer] Error al obtener el buffer:", e);
         return null;
-}
+    }
 };
 
 let tags = {
@@ -35,77 +35,93 @@ let tags = {
 };
 
 function clockString(seconds) {
-    let h = Math.floor(seconds / 3600);
-    let m = Math.floor((seconds % 3600) / 60);
-    let s = Math.floor(seconds % 60);
+    if (typeof seconds !== 'number' || isNaN(seconds)) {
+        seconds = 0;
+    }
+    const totalSeconds = Math.floor(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor(totalSeconds % 60);
     return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
 }
 
-let handler = async (m, { conn}) => {
-    let userId = m.mentionedJid?.[0] || m.sender;
-    let categories = {};
-    let nombre = await conn.getName(m.sender);
-    let user = global.db.data.users[m.sender];
-    let totalreg = Object.keys(global.db.data.users).length;
-    let groupsCount = Object.values(conn.chats).filter(v => v.id.endsWith('@g.us')).length;
-    let uptime = clockString(process.uptime());
+let handler = async (m, { conn, usedPrefix }) => {
+    const userId = m.sender;
+    const nombre = await conn.getName(m.sender);
+    const user = global.db.data.users[m.sender] || {};
+    const totalreg = Object.keys(global.db.data.users).length;
+    const uptime = clockString(process.uptime());
+    const prefix = usedPrefix || '/'; 
 
+    const groupsCount = Object.values(conn.chats).filter(v => v.id.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
+
+    let categories = {};
     const defaultTag = 'otros';
 
-    for (let plugin of Object.values(global.plugins)) {
-        if (!plugin.help ||!plugin.tags) continue;
-        for (let tag of plugin.tags) {
-            if (!categories[tag]) categories[tag] = [];
-            categories[tag].push(...plugin.help.map(cmd => `${cmd}`));
-}
-}
+    for (const plugin of Object.values(global.plugins)) {
+        if (!plugin.help || !plugin.tags || plugin.tags.length === 0) continue;
+        
+        for (const tag of plugin.tags) {
+            const categoryKey = tag.toLowerCase();
+            if (!categories[categoryKey]) categories[categoryKey] = [];
+            
+            const commands = plugin.help.map(cmd => cmd);
+            categories[categoryKey].push(...commands);
+        }
+    }
 
-    let infoUser = `
+    const infoUser = `
 ❐ 𝖧𝗈𝗅𝖺, 𝖲𝗈𝗒 *_𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍_* 🌱
 
-╰┈□ 𝖨𝖭𝖥𝖮-𝖴𝖲𝖤𝖱
+╰┈□ 𝖨𝖭𝖥𝖮-𝖴𝖲𝖤𝖤𝖱
 ❐ _Usuario:_ ${nombre}
 ❐ _Registrados:_ ${totalreg}
 
-╰┈□ 𝖨𝖭𝖥𝖮-𝖡𝖮𝖳
+╰┈□ 𝖨𝖭𝖥𝖣-𝖡𝖮𝖳
 ❐ _Tiempo activo:_ ${uptime}
-❐ _Prefijo:_ \`\`\`[ /. ]\`\`\`
+❐ _Prefijo:_ \`\`\`[ ${prefix} ]\`\`\`
 ❐ _Grupos activos:_ ${groupsCount}
-❐ _Fecha:_ ${new Date().toLocaleString('es-ES')}
+❐ _Fecha:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires' })}
 `.trim();
 
     let menuText = infoUser + '\n\n';
 
-    for (let [tag, cmds] of Object.entries(categories)) {
-        let tagName = tags[tag] || `𓂂𓏸  𐅹੭੭   * ${tag.toUpperCase()}* 🌾 ᦡᦡ`;
-        menuText += `${tagName}\n${cmds.map(cmd => `➩ ${cmd}`).join('\n')}\n\n`;
-}
+    for (const [tag, cmds] of Object.entries(categories)) {
+        const tagName = tags[tag] || `𓂂𓏸  𐅹੭੭   * ${tag.toUpperCase()}* 🌾 ᦡᦡ`;
+        
+        if (cmds.length > 0) {
+            menuText += `${tagName}\n${cmds.map(cmd => `➩ ${cmd}`).join('\n')}\n\n`;
+        }
+    }
 
     try {
+        const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot';
+        const canalId = global.canalIdM?.[0] || '';
+        
         await conn.sendMessage(m.chat, {
             text: menuText,
             contextInfo: {
                 externalAdReply: {
-                    title: global.canalNombreM?.[0] || 'Shadow Bot',
+                    title: canalNombre,
                     body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍',
                     thumbnailUrl: 'https://files.catbox.moe/12zb63.jpg',
                     sourceUrl: 'https://github.com/Shadows-club',
                     mediaType: 1,
                     renderLargerThumbnail: true
-},
-                mentionedJid: [m.sender, userId],
+                },
+                mentionedJid: [m.sender],
                 isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: global.canalIdM?.[0] || '',
-                    newsletterName: 'ѕнα∂σω • σƒƒι¢ιαℓ 🌱',
+                forwardedNewsletterMessageInfo: canalId ? {
+                    newsletterJid: canalId,
+                    newsletterName: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
                     serverMessageId: -1
-}
-}
-}, { quoted: m});
-} catch (e) {
-        console.error('Error al enviar el menú:', e);
-        await m.reply('❌ Ocurrió un error al enviar el menú. Intenta nuevamente.');
-}
+                } : undefined
+            }
+        }, { quoted: m });
+    } catch (e) {
+        console.error('❌ Error al enviar el menú:', e);
+        await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
+    }
 };
 
 handler.help = ['menu', 'menú', 'help'];
