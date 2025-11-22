@@ -26,21 +26,21 @@ async function fbdl(url) {
 
 let handler = async (m, { conn, text}) => {
   if (!text) {
-    return conn.reply(m.chat, `\`\`\`🌱Uso correcto:\n/fb <link de Facebook>\`\`\`\n\n\`\`\`🌵Ejemplo:\n/fb https://www.facebook.com/share/v/.\`\`\``, m, global.rcanal);
+    return conn.reply(m.chat, `\`\`\`🌱 Uso correcto:\n/fb <link de Facebook>\`\`\`\n\n\`\`\`🌵Ejemplo:\n/fb https://www.facebook.com/share/v/.\`\`\``, m, global.rcanal);
             }
 
-  await conn.reply(m.chat, '\`\`\`🌵 Descargando video, espera...\`\`\`');
+  await conn.reply(m.chat, '\`\`\`🌵 Descargando su video, espere...\`\`\`');
 
   try {
     const result = await fbdl(text);
     if (result.status!== "success") throw result.message;
 
     const url = result.hd || result.sd;
-    if (!url) throw '🌱 No se encontró video descargable. Revisa el enlace.';
+    if (!url) throw '\`\`\`🌱 No se encontró video descargable. Revisa el enlace.\`\`\`';
 
     await conn.sendMessage(m.chat, {
       video: { url},
-      caption: `\`\`\`🌱 𝖵𝗂𝖽𝖾𝗈 𝖽𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝖽𝗈 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝖺𝗆𝖾𝗇𝗍𝖾\`\`\`\n\n🔗 *𝖥𝗎𝖾𝗇𝗍𝖾:* Facebook\n🎥 *𝖢𝖺𝗅𝗂𝖽𝖺𝖽:* ${result.hd? 'HD 🌵': 'SD 🌱'}`
+      caption: `\`\`\`🌱 𝖵𝗂𝖽𝖾𝗈 𝖽𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝖽𝗈 𝖼𝗈𝗋𝗋𝖾𝖼𝗍𝖺𝗆𝖾𝗇𝗍𝖾\`\`\`\n\n🔗 *𝖥𝗎𝖾𝗇𝗍𝖾:* 𝖥𝖺𝖼𝖾𝖻𝗈𝗈𝗄\n🎥 *𝖢𝖺𝗅𝗂𝖽𝖺𝖽:* ${result.hd? 'HD 🌵': 'SD 🌱'}`
 }, { quoted: m});
 
 } catch (e) {
