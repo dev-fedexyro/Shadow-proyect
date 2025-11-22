@@ -2,8 +2,7 @@ import fetch from 'node-fetch'
 
 async function makeFkontak() {
   try {
-    const res = await fetch('https://i.postimg.cc/rFfVL8Ps/image.jpg');
-    const thumb2 = Buffer.from(await res.arrayBuffer());
+    const thumb2 = Buffer.from([]);
     return {
       key: {
         participants: '0@s.whatsapp.net',
@@ -26,11 +25,18 @@ async function makeFkontak() {
 
 async function resolveLidSafe(conn, jid) {
   try {
+    
     if (typeof conn.onWhatsApp !== 'function') return null; 
     
-    const res = await conn.onWhatsApp(jid);
+    const res = await conn.onWhatsApp(jid); 
+    
     const r = Array.isArray(res) ? res[0] : null;
-    return r?.lid || null;
+    
+    if (r && r.exists && r.lid) {
+        return r.lid;
+    }
+    
+    return null;
 } catch (e) {
     console.error(`Error al obtener LID para ${jid}:`, e.message);
     return null;
@@ -71,7 +77,7 @@ const handler = async (m, { conn, text, participants, parseUserTargets }) => {
     if (lid) {
         response += `*✅ Linked ID (LID):* \`${lid}\``;
     } else {
-        response += `*❌ Linked ID (LID):* No encontrado o el usuario no existe en WhatsApp.`;
+        response += `*❌ Linked ID (LID):* No encontrado (o el usuario no tiene LID/no está en WhatsApp).`;
     }
     
     const mentionJids = [targetJid];
