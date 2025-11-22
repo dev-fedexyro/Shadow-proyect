@@ -1,7 +1,7 @@
 const handler = async (m, { args, conn, usedPrefix, command}) => {
   try {
     if (!args[0]) {
-      return conn.reply(m.chat, `🌱 Por favor, ingresa un enlace de *Instagram* o *Facebook*.`, m)
+      return conn.reply(m.chat, `\`\`\`🌱 Por favor, ingresa un enlace de *Instagram* o *Facebook*.\`\`\``, m)
 }
 
     let data = []
