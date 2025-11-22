@@ -8,7 +8,7 @@ const handler = async (m, { conn, text, usedPrefix}) => {
   const isUrl = /(?:https:?\/{2})?(?:www\.|vm\.|vt\.|t\.)?tiktok\.com\/([^\s&]+)/gi.test(text);
 
   try {
-    await m.react('🕒');
+    await m.react('⏳');
 
     if (isUrl) {
       const res = await axios.get(`https://www.tikwm.com/api/?url=${encodeURIComponent(text)}?hd=1`);
