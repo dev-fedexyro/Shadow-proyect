@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url'
 let crm1 = "Y2QgcGx1Z2lucy"
 let crm2 = "A7IG1kNXN1b"
 let crm3 = "SBpbmZvLWRvbmFyLmpz"
-let crm4 = "IF9hdXRob3Jlc3BvbmRlci5qcyBpbmZvLWJvdC5qcw"
+let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
 
@@ -145,30 +145,15 @@ export async function ShadowJadiBot(options) {
                         let formattedCode = rawCode.match(/.{1,4}/g)?.join("-")
                         
                         const pairingCodeMessage = `
-\`\`\`SHADOW - CONEXIÓN\`\`\`
-
-\`\`\`${formattedCode}\`\`\`
+*🔑 Vinculación con código*
+*Código:* \`\`\`${formattedCode}\`\`\`
 `;
                         if (txtCodeMessage && txtCodeMessage.key) {
                             await conn.sendMessage(m.chat, { delete: txtCodeMessage.key });
                         }
                         
                         txtCodeMessage = await conn.sendMessage(m.chat, { 
-                            text: pairingCodeMessage.trim(),
-                            contextInfo: {
-                                mentionedJid: [m.sender],
-                                externalAdReply: {
-                                    title: "Shadow - Conexión",
-                                    body: "Shadow - Sub-Bot",
-                                    thumbnailUrl: "https://files.catbox.moe/l1dwyt.jpg",
-                                    sourceUrl: "",
-                                    mediaType: 1,
-                                    renderLargerThumbnail: true,
-                                    showAdAttribution: true,
-                                    mediaUrl: "https://files.catbox.moe/l1dwyt.jpg",
-                                    containsAutoReply: true
-                                }
-                            }
+                            text: pairingCodeMessage.trim()
                         }, { quoted: m });
                         
                         console.log(chalk.bold.greenBright(`Código de Vinculación para +${path.basename(pathShadowJadiBot)}: ${rawCode}`));
