@@ -1,5 +1,5 @@
 /* Código creado por Dev-fedexyz • fede Uchiha 
-* https://github.com/dev-fedexyzz */
+* https://github.com/dev-fedexyzz*/
 
 const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion} = (await import("@whiskeysockets/baileys"));
 import qrcode from "qrcode"
@@ -158,3 +158,4 @@ export async function ShadowJadiBot(options) {
     sock.ev.on("connection.update", sock.connectionUpdate)
     sock.ev.on("creds.update", sock.credsUpdate)
     }
+
