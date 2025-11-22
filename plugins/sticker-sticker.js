@@ -80,7 +80,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 }
 
-handler.help = ['stiker <img>', 'sticker <url>']
+handler.help = ['s <img>', 'stiker <img>', 'sticker <url>']
 handler.tags = ['sticker']
 handler.command = ['s', 'sticker', 'stiker']
 
