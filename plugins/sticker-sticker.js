@@ -15,7 +15,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (/webp|image|video/g.test(mime)) {
 
       if (/video/g.test(mime) && (q.msg || q).seconds > 15) {
-        return conn.reply(m.chat, '\`\`\`🚫 El video no puede durar más de *15 segundos* para sticker.\`\`\`', m)
+        return conn.reply(m.chat, '\`\`\`🪐 El video no puede durar más de *15 segundos* para sticker.\`\`\`', m)
       }
 
       let data = await q.download?.()
