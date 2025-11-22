@@ -101,14 +101,12 @@ async function tryAutoReduce(buffer) {
     return { buffer, reduced: false }
   }
 
-  // Calcular factor de escala manteniendo aspecto
   const scale = Math.min(MAX_DIM / width, MAX_DIM / height, 1)
   const newW = Math.max(1, Math.round(width * scale))
   const newH = Math.max(1, Math.round(height * scale))
 
-  // Redimensionar con Jimp
-  img.resize(newW, newH) // Jimp.AUTO no se usa porque queremos dimensiones específicas
-  // Comprimir un poco para mantener tamaño bajo
+  img.resize(newW, newH)
+
   const outBuffer = await img.quality(80).getBufferAsync(Jimp.MIME_JPEG)
 
   console.log(`🔄 autoReduce: ${width}x${height} -> ${newW}x${newH}`)
