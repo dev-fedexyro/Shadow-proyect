@@ -6,7 +6,7 @@ var handler = async (m, { conn, usedPrefix, command, text, groupMetadata, isAdmi
       ? await m.quoted.sender 
       : null
 
-  if (!user) return conn.reply(m.chat, `\`\`\`☕ Debes mencionar o responder a un usuario.\`\`\``, m)
+  if (!user) return conn.reply(m.chat, `\`\`\`🌱 Debes mencionar o responder a un usuario.\`\`\``, m)
 
   try {
     const groupInfo = await conn.groupMetadata(m.chat)
@@ -22,10 +22,10 @@ var handler = async (m, { conn, usedPrefix, command, text, groupMetadata, isAdmi
 
     if (command === 'demote' || command === 'quitaradmin') {
       if (user === ownerGroup)
-        return conn.reply(m.chat, '> No puedes quitar el admin al dueño del grupo.', m)
+        return conn.reply(m.chat, '`\`\`\`🌑 No puedes quitar el admin al dueño del grupo.`\`\`\`', m)
 
       if (!groupInfo.participants.some(p => p.id === user && p.admin))
-        return conn.reply(m.chat, '> El usuario mencionado no es administrador.', m)
+        return conn.reply(m.chat, '`\`\`\`🌑 El usuario mencionado no es administrador.`\`\`\`', m)
 
       await conn.groupParticipantsUpdate(m.chat, [user], 'demote')
       await conn.reply(m.chat, `\`\`\`🌱 El usuario fue removido de la administración del grupo.\`\`\``, m)
@@ -38,7 +38,7 @@ var handler = async (m, { conn, usedPrefix, command, text, groupMetadata, isAdmi
 
 handler.help = ['promote', 'demote']
 handler.tags = ['group']
-handler.command = ['promote', 'promover', 'demote', 'quitaradmin']
+handler.command = ['promote', 'demote']
 handler.group = true
 handler.admin = true
 handler.botAdmin = true
