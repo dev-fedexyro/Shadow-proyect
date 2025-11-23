@@ -7,7 +7,7 @@ const handler = async (m, { isOwner, isAdmin, conn, participants, args, usedPref
 
   const mensaje = args.join(' ');
   const invocador = m.pushName || 'Sombra Invocadora';
-  const pp = 'https://files.catbox.moe/62sdil.jpg'; // Imagen personalizada estilo Shadow Garden
+  const pp = 'https://files.catbox.moe/32d81v.jpg'; // Imagen personalizada estilo Shadow Garden
 
   let teks = `╭───────𓆩🌑𓆪───────╮
 ┃    🌌 *Invocación del Shadow Garden* 🌑
