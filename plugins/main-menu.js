@@ -52,7 +52,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     const user = global.db.data.users[m.sender] || {};
     const totalreg = Object.keys(global.db.data.users).length;
     const uptime = clockString(process.uptime());
-    const prefix = usedPrefix || '/.'; 
+    const prefix = usedPrefix || '/'; 
 
     const groupsCount = Object.values(conn.chats).filter(v => v.id.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
 
