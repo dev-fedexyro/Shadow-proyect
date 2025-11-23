@@ -80,7 +80,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 ╰┈□ ɪɴғᴏ-ʙᴏᴛ
 ❐ _ᴛɪᴇᴍᴘᴏ ᴀᴄᴛɪᴠᴏ:_ ${uptime}
-❐ _ᴘʀᴇғɪᴊᴏ:_ ```[ ${prefix} ]```
+❐ _ᴘʀᴇғɪᴊᴏ:_ [ ${prefix} ]
 ❐ _ɢʀᴜᴘᴏs ᴀᴄᴛɪᴠᴏs:_ ${groupsCount}
 ❐ _ғᴇᴄʜᴀ:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires'})}
 `.trim();
