@@ -52,7 +52,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     const user = global.db.data.users[m.sender] || {};
     const totalreg = Object.keys(global.db.data.users).length;
     const uptime = clockString(process.uptime());
-    const prefix = usedPrefix || '/'; 
+    const prefix = usedPrefix || '/.'; 
 
     const groupsCount = Object.values(conn.chats).filter(v => v.id.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
 
@@ -72,17 +72,17 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
 
     const infoUser = `
-❐ 𝖧𝗈𝗅𝖺, 𝖲𝗈𝗒 *_𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍_* 🌱
+❐ ʜᴏʟᴀ, sᴏʏ *_sʜᴀᴅᴏᴡ - ʙᴏᴛ_* 🌱
 
-╰┈□ 𝖨𝖭𝖥𝖮-𝖴𝖲𝖤𝖤𝖱
-❐ _Usuario:_ ${nombre}
-❐ _Registrados:_ ${totalreg}
+╰┈□ ɪɴғᴏ-ᴜsᴇᴇʀ
+❐ _ᴜsᴜᴀʀɪᴏ:_ ${nombre}
+❐ _ʀᴇɢɪsᴛʀᴀᴅᴏs:_ ${totalreg}
 
-╰┈□ 𝖨𝖭𝖥𝖣-𝖡𝖮𝖳
-❐ _Tiempo activo:_ ${uptime}
-❐ _Prefijo:_ \`\`\`[ ${prefix} ]\`\`\`
-❐ _Grupos activos:_ ${groupsCount}
-❐ _Fecha:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires' })}
+╰┈□ ɪɴғᴏ-ʙᴏᴛ
+❐ _ᴛɪᴇᴍᴘᴏ ᴀᴄᴛɪᴠᴏ:_ ${uptime}
+❐ _ᴘʀᴇғɪᴊᴏ:_ ```[ ${prefix} ]```
+❐ _ɢʀᴜᴘᴏs ᴀᴄᴛɪᴠᴏs:_ ${groupsCount}
+❐ _ғᴇᴄʜᴀ:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires'})}
 `.trim();
 
     let menuText = infoUser + '\n\n';
