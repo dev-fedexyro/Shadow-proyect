@@ -1,3 +1,16 @@
+import fetch from 'node-fetch';
+
+const getBuffer = async (url) => {
+    try {
+        const res = await fetch(url);
+        if (res.status !== 200) return null;
+        return await res.buffer();
+    } catch (e) {
+        console.error("Error al obtener el buffer:", e);
+        return null;
+    }
+};
+
 let tags = {
   info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
   anime: 'ᴀɴɪᴍᴇ & ᴡᴀɪғᴜs',
@@ -18,11 +31,6 @@ let tags = {
   herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs'
 };
 
-/**
- * Convierte segundos en formato HH:MM:SS
- * @param {number} seconds
- * @returns {string}
- */
 function clockString(seconds) {
     if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0) {
         seconds = 0;
@@ -90,6 +98,15 @@ let handler = async (m, { conn, usedPrefix }) => {
     const videoUrl = 'https://cdn.russellxz.click/14cf14e9.mp4';
     const thumbnailUrl = 'https://files.catbox.moe/12zb63.jpg';
 
+    let thumbBuffer = null;
+    try {
+        thumbBuffer = await getBuffer(thumbnailUrl);
+    } catch (e) {
+        console.error('Error obteniendo buffer de la miniatura:', e);
+    }
+    
+    const jpegThumbnail = thumbBuffer ? thumbBuffer.toString('base64') : undefined;
+
     try {
         const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot - Canal';
         const canalId = global.canalIdM?.[0] || ''; 
@@ -103,7 +120,8 @@ let handler = async (m, { conn, usedPrefix }) => {
                     mediaUrl: videoUrl, 
                     thumbnailUrl: thumbnailUrl,
                     mediaType: 2, 
-                    renderLargerThumbnail: true
+                    renderLargerThumbnail: true,
+                    jpegThumbnail: jpegThumbnail 
                 },
                 mentionedJid: [m.sender],
                 isForwarded: true,
@@ -115,7 +133,7 @@ let handler = async (m, { conn, usedPrefix }) => {
             }
         }, { quoted: m });
     } catch (e) {
-        console.error('❌ Error al enviar el menú con video:', e);
+        console.error('❌ Error al enviar el menú con video (intentando con fallback):', e);
         await conn.sendMessage(m.chat, { text: menuText }, { quoted: m });
         await m.reply('❌ Ocurrió un error al enviar el menú con video. Se envió la versión de solo texto.');
     }
