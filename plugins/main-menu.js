@@ -1,26 +1,5 @@
 import { xpRange } from '../lib/levelling.js';
-
-const clockString = ms => {
-  const h = Math.floor(ms / 3600000);
-  const m = Math.floor(ms / 60000) % 60;
-  const s = Math.floor(ms / 1000) % 60;
-  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
-};
-
-let img = 'https://files.catbox.moe/12zb63.jpg';
-
-let menuText = `
-╭─❒ 「 ꜱʜᴀᴅᴏᴡ - ʙᴏᴛ」
-│ 👤 *Nombre:* %name
-│ 🎖 *Nivel:* %level | *XP:* %exp/%max
-│ 🔓 *Límite:* %limit | *Modo:* %mode
-│ ⏱️ *Uptime:* %uptime
-│ 🌍 *Usuarios:* %total
-│ 🤖 *Bot optimizado para mejor rendimiento.*
-╰❒
-`.trim();
-
-const sectionDivider = '╰───────────────╯';
+import fetch from 'node-fetch';
 
 let tags = {
   info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
@@ -39,81 +18,110 @@ let tags = {
   nsfw: 'ɴsғᴡ',
   owner: 'ᴅᴜᴇñᴏ / ᴀᴅᴍɪɴ',
   sticker: 'sᴛɪᴄᴋᴇʀs & ʟᴏɢᴏs',
-  herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs'
+  herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs',
+  otros: 'ᴏᴛʀᴏs'
 };
 
-let handler = async (m, { conn, usedPrefix: _p }) => {
-  try {
-    const user = global.db?.data?.users?.[m.sender] || { level: 1, exp: 0, limit: 5 };
-    const { exp, level, limit } = user;
-    const { min, xp } = xpRange(level, global.multiplier || 1);
-    const totalreg = Object.keys(global.db?.data?.users || {}).length;
-    const mode = global.opts?.self ? 'Privado 🔒' : 'Público 🌐';
-    const uptime = clockString(process.uptime() * 1000);
-
-    let userName = 'Usuario';
-    try {
-      userName = conn.getName(m.sender);
-    } catch (e) {
-      console.error(e);
+function clockString(seconds) {
+    if (typeof seconds !== 'number' || isNaN(seconds)) {
+        seconds = 0;
     }
+    const totalSeconds = Math.floor(seconds);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = Math.floor(totalSeconds % 60);
+    return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
+}
 
-    let categorizedCommands = {};
-    Object.values(global.plugins)
-      .filter(p => p?.help && !p.disabled)
-      .forEach(p => {
-        const pluginTags = Array.isArray(p.tags) ? p.tags : (typeof p.tags === 'string' ? [p.tags] : ['Otros']);
-        const tag = pluginTags[0]?.toLowerCase() || 'otros'; 
-        
-        const commands = Array.isArray(p.help) ? p.help : (typeof p.help === 'string' ? [p.help] : []);
-        
-        if (commands.length > 0) {
-          categorizedCommands[tag] = categorizedCommands[tag] || new Set();
-          commands.forEach(cmd => categorizedCommands[tag].add(cmd));
+let handler = async (m, { conn, usedPrefix }) => {
+    try {
+        const userId = m.sender;
+        const nombre = await conn.getName(userId);
+        const totalreg = Object.keys(global.db?.data?.users || {}).length;
+        const uptime = clockString(process.uptime());
+        const prefix = usedPrefix || '/'; 
+
+        const groupsCount = Object.values(conn.chats || {}).filter(v => v.id?.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
+
+        let categorizedCommands = {};
+        const defaultTagKey = 'otros';
+
+        Object.values(global.plugins || {})
+            .filter(plugin => plugin.help && !plugin.disabled)
+            .forEach(plugin => {
+                const pluginTags = Array.isArray(plugin.tags) ? plugin.tags : (typeof plugin.tags === 'string' ? [plugin.tags] : [defaultTagKey]);
+                
+                const tagKey = pluginTags[0]?.toLowerCase() || defaultTagKey;
+                
+                const commands = Array.isArray(plugin.help) ? plugin.help : (typeof plugin.help === 'string' ? [plugin.help] : []);
+                
+                if (commands.length > 0) {
+                    categorizedCommands[tagKey] = categorizedCommands[tagKey] || new Set();
+                    commands.forEach(cmd => categorizedCommands[tagKey].add(cmd));
+                }
+            });
+
+        const infoUser = `
+❐ 𝖧𝗈𝗅𝖺, 𝖲𝗈𝗒 *_𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍_* 🌱
+
+╰┈□ 𝖨𝖭𝖥𝖮-𝖴𝖲𝖤𝖤𝖱
+❐ _Usuario:_ ${nombre}
+❐ _Registrados:_ ${totalreg}
+
+╰┈□ 𝖨𝖭𝖥𝖣-𝖡𝖮𝖳
+❐ _Tiempo activo:_ ${uptime}
+❐ _Prefijo:_ \`\`\`[ ${prefix} ]\`\`\`
+❐ _Grupos activos:_ ${groupsCount}
+❐ _Fecha:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires' })}
+`.trim();
+
+        let menuBody = '';
+        for (const [tag, cmds] of Object.entries(categorizedCommands)) {
+            const tagName = tags[tag] || `🌱 ${tag.toUpperCase()}`; 
+            
+            if (cmds.size > 0) {
+                menuBody += `\n╭─「 ${tagName} 」\n`; 
+                menuBody += [...cmds].map(cmd => `│ ➩ ${prefix}${cmd}`).join('\n');
+                menuBody += `\n╰───────────────╯\n`;
+            }
         }
-      });
+        
+        const fullMenu = `${infoUser}\n\n${menuBody.trim()}`;
 
-    const menuBody = Object.entries(categorizedCommands).map(([title, cmds]) => {
-      const emojiName = tags[title] || '📁 Otros'; 
-      const commandEntries = [...cmds].map(cmd => `│ ◦ _${_p}${cmd}_`).join('\n');
-      
-      const displayTitle = title.charAt(0).toUpperCase() + title.slice(1);
+        const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot';
+        const canalId = global.canalIdM?.[0] || '';
+        const thumbnailUrl = 'https://files.catbox.moe/12zb63.jpg';
 
-      return `╭─「 ${emojiName} *${displayTitle}* 」\n${commandEntries}\n${sectionDivider}`;
-    }).join('\n\n');
+        await conn.sendMessage(m.chat, {
+            text: fullMenu,
+            contextInfo: {
+                externalAdReply: {
+                    title: canalNombre,
+                    body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍',
+                    thumbnailUrl: thumbnailUrl,
+                    sourceUrl: 'https://github.com/Shadows-club',
+                    mediaType: 1,
+                    renderLargerThumbnail: true
+                },
+                mentionedJid: [userId],
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: canalId ? {
+                    newsletterJid: canalId,
+                    newsletterName: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
+                    serverMessageId: -1
+                } : undefined
+            }
+        }, { quoted: m });
 
-    const finalHeader = menuText
-      .replace('%name', userName)
-      .replace('%level', level)
-      .replace('%exp', exp - min)
-      .replace('%max', xp)
-      .replace('%limit', limit)
-      .replace('%mode', mode)
-      .replace('%uptime', uptime)
-      .replace('%total', totalreg);
-
-    const fullMenu = `${finalHeader}\n\n${menuBody}`;
-
-    try {
-      await conn.sendMessage(m.chat, {
-        image: { url: img },
-        caption: fullMenu,
-        mentions: [m.sender]
-      }, { quoted: m });
-    } catch (sendError) {
-      console.error('Error al enviar la imagen del menú, enviando como texto:', sendError);
-      await conn.reply(m.chat, fullMenu, m);
+    } catch (e) {
+        console.error('❌ Error general al enviar el menú:', e);
+        await m.reply('⚠️ Ocurrió un error al generar y enviar el menú. Por favor, reporta este error al dueño del bot.');
     }
-
-  } catch (e) {
-    console.error('Error general al generar el menú:', e);
-    conn.reply(m.chat, '⚠️ Ocurrió un error al generar el menú. Por favor, inténtalo de nuevo más tarde o contacta al soporte.', m);
-  }
 };
 
 handler.help = ['menu', 'menú', 'help'];
 handler.tags = ['main'];
 handler.command = ['menu', 'menú', 'help'];
-handler.register = true; 
+handler.register = true;
 
 export default handler;
