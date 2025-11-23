@@ -36,9 +36,6 @@ let handler = async (m, { conn, usedPrefix }) => {
     const prefix = usedPrefix || '/'; 
     const groupsCount = Object.values(conn.chats).filter(v => v.id.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
 
-    const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot - Canal';
-    const canalId = global.canalIdM?.[0] || ''; 
-
     let categories = {};
 
     for (const plugin of Object.values(global.plugins)) {
@@ -89,8 +86,8 @@ let handler = async (m, { conn, usedPrefix }) => {
         {
           name: 'cta_url',
           buttonParamsJson: JSON.stringify({ 
-            display_text: '🌱 ᴄᴀɴᴀʟ ᴏғɪᴄɪᴀʟ', 
-            url: 'https://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W' 
+            display_text: '🍉 ᴄᴀɴᴀʟ ᴏғɪᴄɪᴀʟ', 
+            url: 'https://whatsapp.com/channel/0029VbBvZH5LNSa4ovSSbQ2N' 
           })
         }
     ];
@@ -102,18 +99,13 @@ let handler = async (m, { conn, usedPrefix }) => {
         const templateMessage = {
             image: { url: thumbnailUrl },
             caption: menuText,
-            footer: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
+            footer: '𝖲𝗁𝖺ᴅᴏᴡ - 𝖡ᴏƚ',
             templateButtons: nativeButtons,
             contextInfo: {
                 mentionedJid: [m.sender],
                 isForwarded: true,
-                forwardedNewsletterMessageInfo: canalId && canalId.includes('@newsletter') ? {
-                    newsletterJid: canalId,
-                    newsletterName: '𝖲𝗁𝖺ᴅᴏᴡ - 𝖡ᴏƚ',
-                    serverMessageId: -1
-                } : undefined,
                 externalAdReply: {
-                    title: canalNombre,
+                    title: 'Shadow Bot - Canal',
                     body: '𝖲𝗁𝖺ᴅᴏᴡ - 𝖡ᴏƚ',
                     thumbnailUrl: thumbnailUrl,
                     sourceUrl: sourceUrl,
@@ -131,7 +123,7 @@ let handler = async (m, { conn, usedPrefix }) => {
                 text: menuText,
                 contextInfo: {
                     externalAdReply: {
-                        title: canalNombre,
+                        title: 'Shadow Bot - Canal',
                         body: '𝖲𝗁𝖺ᴅᴏᴡ - 𝖡ᴏƚ',
                         thumbnailUrl: global.fgThumb || 'https://files.catbox.moe/12zb63.jpg',
                         sourceUrl: global.gataMiau || 'https://github.com/Shadows-club',
@@ -140,11 +132,6 @@ let handler = async (m, { conn, usedPrefix }) => {
                     },
                     mentionedJid: [m.sender],
                     isForwarded: true,
-                    forwardedNewsletterMessageInfo: canalId && canalId.includes('@newsletter') ? {
-                        newsletterJid: canalId,
-                        newsletterName: '𝖲𝗁𝖺ᴅᴏᴡ - 𝖡ᴏƚ',
-                        serverMessageId: -1
-                    } : undefined
                 }
             }, { quoted: m });
         } catch(e2) {
