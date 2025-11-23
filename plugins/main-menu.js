@@ -18,6 +18,11 @@ let tags = {
   herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs'
 };
 
+/**
+ * Convierte segundos en formato HH:MM:SS
+ * @param {number} seconds
+ * @returns {string}
+ */
 function clockString(seconds) {
     if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0) {
         seconds = 0;
@@ -64,7 +69,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 ╰┈□ ɪɴғᴏ-ʙᴏᴛ
 ❐ _ᴛɪᴇᴍᴘᴏ ᴀᴄᴛɪᴠᴏ:_ ${uptime}
-❐ _ᴘʀᴇғɪᴊᴏ:_ ```[ ${prefix} ]```
+❐ _ᴘʀᴇғɪᴊᴏ:_ \`\`\`[ ${prefix} ]\`\`\`
 ❐ _ɢʀᴜᴘᴏs ᴀᴄᴛɪᴠᴏs:_ ${groupsCount}
 ❐ _ғᴇᴄʜᴀ:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires'})}
 `.trim();
@@ -82,10 +87,12 @@ let handler = async (m, { conn, usedPrefix }) => {
         }
     }
 
+    const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4';
+    const THUMBNAIL_URL = 'https://files.catbox.moe/12zb63.jpg';
+
     try {
         const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot - Canal';
         const canalId = global.canalIdM?.[0] || ''; 
-        const thumbnailUrl = global.fgThumb || 'https://files.catbox.moe/12zb63.jpg';
         const sourceUrl = global.gataMiau || 'https://github.com/Shadows-club';
         
         await conn.sendMessage(m.chat, {
@@ -94,9 +101,10 @@ let handler = async (m, { conn, usedPrefix }) => {
                 externalAdReply: {
                     title: canalNombre,
                     body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
-                    thumbnailUrl: thumbnailUrl,
+                    mediaUrl: VIDEO_URL, 
+                    thumbnailUrl: THUMBNAIL_URL,
                     sourceUrl: sourceUrl,
-                    mediaType: 1,
+                    mediaType: 2, 
                     renderLargerThumbnail: true
                 },
                 mentionedJid: [m.sender],
@@ -109,8 +117,9 @@ let handler = async (m, { conn, usedPrefix }) => {
             }
         }, { quoted: m });
     } catch (e) {
-        console.error('❌ Error al enviar el menú:', e);
-        await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
+        console.error('❌ Error al enviar el menú con video:', e);
+        await conn.sendMessage(m.chat, { text: menuText }, { quoted: m });
+        await m.reply('❌ Ocurrió un error al enviar el menú con video. Se envió la versión de solo texto.');
     }
 };
 
