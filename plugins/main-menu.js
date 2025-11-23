@@ -1,6 +1,3 @@
-import { xpRange } from '../lib/levelling.js';
-import fetch from 'node-fetch';
-
 let tags = {
   info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
   anime: 'ᴀɴɪᴍᴇ & ᴡᴀɪғᴜs',
@@ -18,12 +15,11 @@ let tags = {
   nsfw: 'ɴsғᴡ',
   owner: 'ᴅᴜᴇñᴏ / ᴀᴅᴍɪɴ',
   sticker: 'sᴛɪᴄᴋᴇʀs & ʟᴏɢᴏs',
-  herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs',
-  otros: 'ᴏᴛʀᴏs'
+  herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs'
 };
 
 function clockString(seconds) {
-    if (typeof seconds !== 'number' || isNaN(seconds)) {
+    if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0) {
         seconds = 0;
     }
     const totalSeconds = Math.floor(seconds);
@@ -34,88 +30,87 @@ function clockString(seconds) {
 }
 
 let handler = async (m, { conn, usedPrefix }) => {
-    try {
-        const userId = m.sender;
-        const nombre = await conn.getName(userId);
-        const totalreg = Object.keys(global.db?.data?.users || {}).length;
-        const uptime = clockString(process.uptime());
-        const prefix = usedPrefix || '/'; 
+    const nombre = await conn.getName(m.sender);
+    const totalreg = Object.keys(global.db.data.users).length;
+    const uptime = clockString(process.uptime());
+    const prefix = usedPrefix || '/'; 
+    const groupsCount = Object.values(conn.chats).filter(v => v.id.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
 
-        const groupsCount = Object.values(conn.chats || {}).filter(v => v.id?.endsWith('@g.us') && !v.read_only && v.presence !== 'unavailable').length;
+    let categories = {};
 
-        let categorizedCommands = {};
-        const defaultTagKey = 'otros';
+    for (const plugin of Object.values(global.plugins)) {
+        if (!plugin.help || !plugin.tags || plugin.tags.length === 0) continue;
+        
+        const commands = plugin.help
+            .filter(cmd => !cmd.startsWith('#') && cmd !== 'menu' && cmd !== 'menú' && cmd !== 'help')
+            .map(cmd => `${prefix}${cmd}`);
+            
+        if (commands.length === 0) continue;
 
-        Object.values(global.plugins || {})
-            .filter(plugin => plugin.help && !plugin.disabled)
-            .forEach(plugin => {
-                const pluginTags = Array.isArray(plugin.tags) ? plugin.tags : (typeof plugin.tags === 'string' ? [plugin.tags] : [defaultTagKey]);
-                
-                const tagKey = pluginTags[0]?.toLowerCase() || defaultTagKey;
-                
-                const commands = Array.isArray(plugin.help) ? plugin.help : (typeof plugin.help === 'string' ? [plugin.help] : []);
-                
-                if (commands.length > 0) {
-                    categorizedCommands[tagKey] = categorizedCommands[tagKey] || new Set();
-                    commands.forEach(cmd => categorizedCommands[tagKey].add(cmd));
-                }
-            });
+        for (const tag of plugin.tags) {
+            const categoryKey = tag.toLowerCase();
+            if (!categories[categoryKey]) categories[categoryKey] = [];
+            
+            categories[categoryKey].push(...commands.filter(cmd => !categories[categoryKey].includes(cmd)));
+        }
+    }
 
-        const infoUser = `
-❐ ʜᴏʟᴀ, sᴏʏ *_sʜᴀᴅᴏᴡ - ʙᴏᴛ_* 🌱
+    const infoUser = `
+❐ 𝖧𝗈𝗅𝖺, 𝖲𝗈𝗒 *_𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍_* 🌱
 
-╰┈□ ɪɴғᴏ-ᴜsᴇᴇʀ
-❐ _ᴜsᴜᴀʀɪᴏ:_ ${nombre}
-❐ _ʀᴇɢɪsᴛʀᴀᴅᴏs:_ ${totalreg}
+╰┈□ 𝖨𝖭𝖥𝖮-𝖴𝖲𝖤𝖤𝖱
+❐ _Usuario:_ ${nombre}
+❐ _Registrados:_ ${totalreg}
 
-╰┈□ ɪɴғᴏ-ʙᴏᴛ
-❐ _ᴛɪᴇᴍᴘᴏ ᴀᴄᴛɪᴠᴏ:_ ${uptime}
-❐ _ᴘʀᴇғɪᴊᴏ:_ ```[ ${prefix} ]```
-❐ _ɢʀᴜᴘᴏs ᴀᴄᴛɪᴠᴏs:_ ${groupsCount}
-❐ _ғᴇᴄʜᴀ:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires'})}
+╰┈□ 𝖨𝖭𝖥𝖣-𝖡𝖮𝖳
+❐ _Tiempo activo:_ ${uptime}
+❐ _Prefijo:_ \`\`\`[ ${prefix} ]\`\`\`
+❐ _Grupos activos:_ ${groupsCount}
+❐ _Fecha:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires' })}
 `.trim();
 
-        let menuBody = '';
-        for (const [tag, cmds] of Object.entries(categorizedCommands)) {
-            const tagName = tags[tag] || `🌱 ${tag.toUpperCase()}`; 
-            
-            if (cmds.size > 0) {
-                menuBody += `\n╭─「 ${tagName} 」\n`; 
-                menuBody += [...cmds].map(cmd => `│ ➩ ${prefix}${cmd}`).join('\n');
-                menuBody += `\n╰───────────────╯\n`;
-            }
-        }
+    let menuText = infoUser + '\n\n';
+    
+    const sortedTags = Object.keys(tags).filter(tag => categories[tag] && categories[tag].length > 0);
+
+    for (const tag of sortedTags) {
+        const tagName = tags[tag] || `${tag.toUpperCase()} `;
+        const cmds = categories[tag].sort(); 
         
-        const fullMenu = `${infoUser}\n\n${menuBody.trim()}`;
+        if (cmds.length > 0) {
+            menuText += `╭─「${tagName}」\n${cmds.map(cmd => `➩ ${cmd}`).join('\n')}\n\n`;
+        }
+    }
 
-        const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot';
-        const canalId = global.canalIdM?.[0] || '';
-        const thumbnailUrl = 'https://files.catbox.moe/12zb63.jpg';
-
+    try {
+        const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot - Canal';
+        const canalId = global.canalIdM?.[0] || ''; 
+        const thumbnailUrl = global.fgThumb || 'https://files.catbox.moe/12zb63.jpg';
+        const sourceUrl = global.gataMiau || 'https://github.com/Shadows-club';
+        
         await conn.sendMessage(m.chat, {
-            text: fullMenu,
+            text: menuText,
             contextInfo: {
                 externalAdReply: {
                     title: canalNombre,
-                    body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈𝗍',
+                    body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
                     thumbnailUrl: thumbnailUrl,
-                    sourceUrl: 'https://github.com/Shadows-club',
+                    sourceUrl: sourceUrl,
                     mediaType: 1,
                     renderLargerThumbnail: true
                 },
-                mentionedJid: [userId],
+                mentionedJid: [m.sender],
                 isForwarded: true,
-                forwardedNewsletterMessageInfo: canalId ? {
+                forwardedNewsletterMessageInfo: canalId && canalId.includes('@newsletter') ? {
                     newsletterJid: canalId,
                     newsletterName: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
                     serverMessageId: -1
                 } : undefined
             }
         }, { quoted: m });
-
     } catch (e) {
-        console.error('❌ Error general al enviar el menú:', e);
-        await m.reply('⚠️ Ocurrió un error al generar y enviar el menú. Por favor, reporta este error al dueño del bot.');
+        console.error('❌ Error al enviar el menú:', e);
+        await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
     }
 };
 
