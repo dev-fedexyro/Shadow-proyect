@@ -1,16 +1,3 @@
-import fetch from 'node-fetch';
-
-const getBuffer = async (url) => {
-    try {
-        const res = await fetch(url);
-        if (res.status !== 200) return null;
-        return await res.buffer();
-    } catch (e) {
-        console.error("Error al obtener el buffer:", e);
-        return null;
-    }
-};
-
 let tags = {
   info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
   anime: 'ᴀɴɪᴍᴇ & ᴡᴀɪғᴜs',
@@ -77,7 +64,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 ╰┈□ ɪɴғᴏ-ʙᴏᴛ
 ❐ _ᴛɪᴇᴍᴘᴏ ᴀᴄᴛɪᴠᴏ:_ ${uptime}
-❐ _ᴘʀᴇғɪᴊᴏ:_ \`\`\`[ ${prefix} ]\`\`\`
+❐ _ᴘʀᴇғɪᴊᴏ:_ ```[ ${prefix} ]```
 ❐ _ɢʀᴜᴘᴏs ᴀᴄᴛɪᴠᴏs:_ ${groupsCount}
 ❐ _ғᴇᴄʜᴀ:_ ${new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires'})}
 `.trim();
@@ -95,21 +82,11 @@ let handler = async (m, { conn, usedPrefix }) => {
         }
     }
 
-    const videoUrl = 'https://cdn.russellxz.click/14cf14e9.mp4';
-    const thumbnailUrl = 'https://files.catbox.moe/12zb63.jpg';
-
-    let thumbBuffer = null;
-    try {
-        thumbBuffer = await getBuffer(thumbnailUrl);
-    } catch (e) {
-        console.error('Error obteniendo buffer de la miniatura:', e);
-    }
-    
-    const jpegThumbnail = thumbBuffer ? thumbBuffer.toString('base64') : undefined;
-
     try {
         const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot - Canal';
         const canalId = global.canalIdM?.[0] || ''; 
+        const thumbnailUrl = global.fgThumb || 'https://files.catbox.moe/12zb63.jpg';
+        const sourceUrl = global.gataMiau || 'https://github.com/Shadows-club';
         
         await conn.sendMessage(m.chat, {
             text: menuText,
@@ -117,11 +94,10 @@ let handler = async (m, { conn, usedPrefix }) => {
                 externalAdReply: {
                     title: canalNombre,
                     body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
-                    mediaUrl: videoUrl, 
                     thumbnailUrl: thumbnailUrl,
-                    mediaType: 2, 
-                    renderLargerThumbnail: true,
-                    jpegThumbnail: jpegThumbnail 
+                    sourceUrl: sourceUrl,
+                    mediaType: 1,
+                    renderLargerThumbnail: true
                 },
                 mentionedJid: [m.sender],
                 isForwarded: true,
@@ -133,9 +109,8 @@ let handler = async (m, { conn, usedPrefix }) => {
             }
         }, { quoted: m });
     } catch (e) {
-        console.error('❌ Error al enviar el menú con video (intentando con fallback):', e);
-        await conn.sendMessage(m.chat, { text: menuText }, { quoted: m });
-        await m.reply('❌ Ocurrió un error al enviar el menú con video. Se envió la versión de solo texto.');
+        console.error('❌ Error al enviar el menú:', e);
+        await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
     }
 };
 
