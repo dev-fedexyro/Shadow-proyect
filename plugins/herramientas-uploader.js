@@ -77,7 +77,7 @@ const handler = async (m, { conn, command, usedPrefix, text }) => {
             ? `⚠️ **Error en la subida a ${command.toUpperCase()}!**`
             : `⚠︎ **Error Crítico.** Problema inesperado (descarga/proceso).`
             
-        await conn.reply(m.chat, `${errorMessage}\n> Usa *${usedPrefix}report* para informarlo.\n\n_Detalles_: ${error.message}`, m)
+        await conn.reply(m.chat, `${errorMessage}\n\n_Detalles_: ${error.message}`, m)
     }
 }
 
