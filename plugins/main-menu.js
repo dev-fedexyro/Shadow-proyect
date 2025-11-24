@@ -33,8 +33,6 @@ let handler = async (m, { conn, usedPrefix }) => {
     const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4';
     const EP_TITLE = 'Shadow menu';
     const BODY = 'Shadow bot';
-
-    const nombre = await conn.getName(m.sender);
     const totalreg = Object.keys(global.db.data.users).length;
     const uptime = clockString(process.uptime());
     const prefix = usedPrefix || '/'; 
@@ -63,7 +61,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ❐ ʜᴏʟᴀ, sᴏʏ *_sʜᴀᴅᴏᴡ - ʙᴏᴛ_* 🌱
 
 ╰┈□ ɪɴғᴏ-ᴜsᴇᴇʀ
-❐ _ᴜsᴜᴀʀɪᴏ:_ ${nombre}
+❐ _ᴜsᴜᴀʀɪᴏ:_ ${await conn.getName(m.sender)}
 ❐ _ʀᴇɢɪsᴛʀᴀᴅᴏs:_ ${totalreg}
 
 ╰┈□ ɪɴғᴏ-ʙᴏᴛ
@@ -85,39 +83,42 @@ let handler = async (m, { conn, usedPrefix }) => {
             menuText += `╭─「${tagName}」\n${cmds.map(cmd => `➩ ${cmd}`).join('\n')}\n\n`;
         }
     }
+    
+    const buttons = [
+        { buttonId: `${prefix}code`, buttonText: { displayText: 'SER SUB-BOT' }, type: 1 },
+        { buttonId: `${prefix}Grupos`, buttonText: { displayText: 'GRUPO OFICIAL'}, type: 1 }
+    ];
+
+    const messageOptions = {
+        text: menuText, 
+        buttons: buttons,
+        headerType: 4, 
+        video: { url: VIDEO_URL }, 
+        caption: menuText, 
+        gifPlayback: true,
+        contextInfo: { 
+            mentionedJid: [m.sender],
+            isForwarded: true,
+            externalAdReply: { 
+                title: EP_TITLE,
+                body: BODY,
+                mediaType: 2, 
+                thumbnailUrl: ICON_URL
+            }
+        }
+    };
 
     try {
-        await conn.sendMessage(m.chat, {
-            video: { url: VIDEO_URL }, 
-            caption: menuText,
-            gifPlayback: true,
-            contextInfo: { 
-                mentionedJid: [m.sender],
-                isForwarded: true,
-                externalAdReply: { 
-                    title: EP_TITLE,
-                    body: BODY,
-                    mediaType: 2, 
-                    thumbnailUrl: ICON_URL
-                }
-            }
-        }, { quoted: m });
+        await conn.sendMessage(m.chat, messageOptions, { quoted: m });
     } catch (e) {
-        console.error('❌ Error al enviar el menú:', e);
+        console.error('❌ Error al enviar el menú con botones y video:', e);
+        messageOptions.video = null;
+        messageOptions.headerType = 1; 
+        messageOptions.caption = menuText;
+        messageOptions.contextInfo.externalAdReply.mediaType = 1; 
+        
         try {
-            await conn.sendMessage(m.chat, {
-                text: menuText,
-                contextInfo: { 
-                    mentionedJid: [m.sender],
-                    isForwarded: true,
-                    externalAdReply: {
-                        title: EP_TITLE,
-                        body: BODY,
-                        mediaType: 1,
-                        thumbnailUrl: ICON_URL
-                    }
-                }
-            }, { quoted: m });
+            await conn.sendMessage(m.chat, messageOptions, { quoted: m });
         } catch (e2) {
             console.error('❌ Error en el fallback del menú:', e2);
             await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
