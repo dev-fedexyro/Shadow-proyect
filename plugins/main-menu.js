@@ -98,7 +98,9 @@ let handler = async (m, { conn, usedPrefix }) => {
                     title: EP_TITLE,
                     body: BODY,
                     mediaType: 2, 
-                    thumbnailUrl: ICON_URL
+                    thumbnailUrl: ICON_URL,
+                    newsletterJid: global.canalIdM[0],
+                    newsletterName: global.canalNombreM[0],
                 }
             }
         }, { quoted: m });
@@ -114,7 +116,9 @@ let handler = async (m, { conn, usedPrefix }) => {
                         title: EP_TITLE,
                         body: BODY,
                         mediaType: 1,
-                        thumbnailUrl: ICON_URL
+                        thumbnailUrl: ICON_URL,
+                        newsletterJid: global.canalIdM[0],
+                        newsletterName: global.canalNombreM[0],
                     }
                 }
             }, { quoted: m });
