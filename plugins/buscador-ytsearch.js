@@ -31,7 +31,7 @@ const handler = async (m, { text, conn, command}) => {
 }
 };
 
-handler.help = ['ytsearch'];
+handler.help = ['ytbuscar', 'ytsearch', 'yts'];
 handler.tags = ['buscador'];
 handler.command = ['ytbuscar', 'ytsearch', 'yts'];
 handler.register = true;
