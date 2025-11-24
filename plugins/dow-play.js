@@ -24,8 +24,8 @@ const handler = async (m, { conn, text, usedPrefix, command}) => {
     if (seconds> 1800) throw '⛔ El contenido supera el límite de duración (10 minutos).'
 
     const vistas = formatViews(views)
-    const info = `🎧 Descargando: *${title}*\n\n📺 Canal: *${author.name}*\n👁️ Vistas: *${vistas}*\n⏱️ Duración: *${timestamp}*\n📅 Publicado: *${ago}*\n🔗 Enlace: ${url}`
-    const thumb = (await conn.getFile(thumbnail)).data
+    const canal = author?.name || "Desconocido"
+    const info = `🎧 Descargando: *${title}*\n\n📺 Canal: *${canal}*\n👁️ Vistas: *${vistas}*\n⏱️ Duración: *${timestamp}*\n📅 Publicado: *${ago}*\n🔗 Enlace: ${url}`    const thumb = (await conn.getFile(thumbnail)).data
     await conn.sendMessage(m.chat, { image: thumb, caption: info}, { quoted: m})
 
     if (['play', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
