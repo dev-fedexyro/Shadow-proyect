@@ -30,7 +30,7 @@ function clockString(seconds) {
 
 let handler = async (m, { conn, usedPrefix }) => {
     const ICON_URL = 'https://files.catbox.moe/12zb63.jpg';
-    const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4';
+    const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4'; 
     const EP_TITLE = 'Shadow menu';
     const BODY = 'Shadow bot';
     const totalreg = Object.keys(global.db.data.users).length;
@@ -85,17 +85,14 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
     
     const buttons = [
-        { buttonId: `${prefix}code`, buttonText: { displayText: 'SER SUB-BOT' }, type: 1 },
-        { buttonId: `${prefix}Grupos`, buttonText: { displayText: 'GRUPO OFICIAL'}, type: 1 }
+        { buttonId: `${prefix}code`, buttonText: { displayText: '.code' }, type: 1 },
+        { buttonId: `${prefix}Grupos`, buttonText: { displayText: '.Grupos' }, type: 1 }
     ];
 
     const messageOptions = {
         text: menuText, 
         buttons: buttons,
         headerType: 4, 
-        video: { url: VIDEO_URL }, 
-        caption: menuText, 
-        gifPlayback: true,
         contextInfo: { 
             mentionedJid: [m.sender],
             isForwarded: true,
@@ -103,7 +100,8 @@ let handler = async (m, { conn, usedPrefix }) => {
                 title: EP_TITLE,
                 body: BODY,
                 mediaType: 2, 
-                thumbnailUrl: ICON_URL
+                thumbnailUrl: ICON_URL,
+                sourceUrl: VIDEO_URL, 
             }
         }
     };
@@ -111,12 +109,11 @@ let handler = async (m, { conn, usedPrefix }) => {
     try {
         await conn.sendMessage(m.chat, messageOptions, { quoted: m });
     } catch (e) {
-        console.error('❌ Error al enviar el menú con botones y video:', e);
-        messageOptions.video = null;
-        messageOptions.headerType = 1; 
-        messageOptions.caption = menuText;
-        messageOptions.contextInfo.externalAdReply.mediaType = 1; 
+        console.error('❌ Error al enviar el menú con botones y media:', e);
         
+        messageOptions.headerType = 1; 
+        messageOptions.contextInfo.externalAdReply.mediaType = 1; 
+
         try {
             await conn.sendMessage(m.chat, messageOptions, { quoted: m });
         } catch (e2) {
