@@ -2,8 +2,7 @@ import yts from "yt-search"
 import fetch from "node-fetch"
 
 const handler = async (m, { conn, text, command }) => {
-
-  if (!text) return m.reply(`🌱 Promociona un nombre o enlace de YouTube...`, m, global.rcanal)
+  if (!text) return m.reply(`🌱 Promociona un nombre o enlace de YouTube...`)
 
   await m.react("🔎")
 
@@ -81,7 +80,7 @@ Espere un momento, se está procesando el archivo...`
     const data = await response.json()
 
     if (!data || !data.status || !data.result || !data.result.url) {
-      throw new Error("No se pudo obtener el archivo de descarga desde el servidor.")
+      throw new Error("🌵 No se pudo obtener el archivo de descarga...")
     }
 
     if (type === "mp3") {
