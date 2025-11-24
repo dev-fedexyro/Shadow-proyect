@@ -42,9 +42,9 @@ const handler = async (m, { conn, text, usedPrefix}) => {
 }
 };
 
-handler.help = ['imagen'];
+handler.help = ['imagen', 'image', 'img'];
 handler.tags = ['downloader'];
-handler.command = ['imagen', 'image'];
+handler.command = ['imagen', 'image', 'img'];
 
 export default handler;
 
