@@ -6,7 +6,7 @@ let tags = {
   economy: 'ᴇᴄᴏɴᴏᴍɪ́ᴀ & ᴊᴜᴇɢᴏs',
   fun: 'ᴊᴜᴇɢᴏs ᴅɪᴠᴇʀᴛɪᴅᴏs',
   group: 'ғᴜɴᴄɪᴏɴᴇs ᴅᴇ ɢʀᴜᴘᴏ',
-  ai: 'ɪɴᴛᴇʟɪɢᴇɴᴄɪᴀ ᴀʀᴛɪғɪᴄɪᴀʟ',
+  ai: 'ɪɴᴛᴇʟɪɢᴇɴᴄɪᴀ ᴀʀᴛғɪᴄɪᴀʟ',
   game: 'ᴊᴜᴇɢᴏs ᴄʟᴀ́sɪᴄᴏs',
   serbot: 'sᴜʙ-ʙᴏᴛs',
   main: 'ᴄᴏᴍᴀɴᴅᴏs ᴘʀɪɴᴄɪᴘᴀʟᴇs',
@@ -29,6 +29,11 @@ function clockString(seconds) {
 }
 
 let handler = async (m, { conn, usedPrefix }) => {
+    const ICON_URL = 'https://files.catbox.moe/12zb63.jpg';
+    const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4';
+    const EP_TITLE = 'Shadow menu';
+    const BODY = 'Shadow bot';
+
     const nombre = await conn.getName(m.sender);
     const totalreg = Object.keys(global.db.data.users).length;
     const uptime = clockString(process.uptime());
@@ -82,27 +87,41 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
 
     try {
-        const thumbnailUrl = global.fgThumb || 'https://files.catbox.moe/12zb63.jpg';
-        const sourceUrl = global.gataMiau || 'https://github.com/Shadows-club';
-        
         await conn.sendMessage(m.chat, {
-            text: menuText,
-            contextInfo: {
-                externalAdReply: {
-                    title: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
-                    body: 'Shadow bot!',
-                    thumbnailUrl: thumbnailUrl,
-                    sourceUrl: sourceUrl,
-                    mediaType: 1,
-                    renderLargerThumbnail: true
-                },
+            video: { url: VIDEO_URL }, 
+            caption: menuText,
+            gifPlayback: true,
+            contextInfo: { 
                 mentionedJid: [m.sender],
                 isForwarded: true,
+                externalAdReply: { 
+                    title: EP_TITLE,
+                    body: BODY,
+                    mediaType: 2, 
+                    thumbnailUrl: ICON_URL
+                }
             }
         }, { quoted: m });
     } catch (e) {
         console.error('❌ Error al enviar el menú:', e);
-        await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
+        try {
+            await conn.sendMessage(m.chat, {
+                text: menuText,
+                contextInfo: { 
+                    mentionedJid: [m.sender],
+                    isForwarded: true,
+                    externalAdReply: {
+                        title: EP_TITLE,
+                        body: BODY,
+                        mediaType: 1,
+                        thumbnailUrl: ICON_URL
+                    }
+                }
+            }, { quoted: m });
+        } catch (e2) {
+            console.error('❌ Error en el fallback del menú:', e2);
+            await m.reply('❌ Ocurrió un error al enviar el menú. Por favor, reporta este error al dueño del bot.');
+        }
     }
 };
 
