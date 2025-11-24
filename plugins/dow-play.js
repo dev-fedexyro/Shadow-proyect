@@ -118,8 +118,8 @@ Espere un momento, se está procesando el archivo...`
 
 const cleanName = (name) => name.replace(/[^\w\s-_.]/gi, "").substring(0, 50)
 
-handler.command = handler.help = ["play", "playaudio", "ytmp3", "play2", "playvid", "ytv", "ytmp4", "yt"]
-handler.tags = ["descargas"]
+handler.command = handler.help = ["play", "playaudio", "ytmp3", "play2", "playvid", "ytv", "ytmp4"]
+handler.tags = ["downloader"]
 handler.register = true
 
 export default handler
