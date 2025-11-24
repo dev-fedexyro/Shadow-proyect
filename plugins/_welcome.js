@@ -1,33 +1,35 @@
-import { URL_WAV, URL_GIF } from "../config.js"
-
 export async function participantsUpdate(conn, m) {
-    if (!m.isGroup || !m.type) return
-
-    const user = m.participants[0]
+    const chat = m.id
+    const action = m.action
     
-    const groupName = (await conn.groupMetadata(m.chat)).subject
-    
-    const userNameMention = `@${user.split('@')[0]}`
+    if (action !== 'add' && action !== 'remove') return
 
+    let groupName = 'el grupo'
     try {
-        if (m.type === 'add') {
+        const metadata = await conn.groupMetadata(chat)
+        groupName = metadata.subject
+    } catch (e) {
+        console.error('Error al obtener la metadata del grupo:', e)
+    }
+
+    for (let user of m.participants) {
+        const userNameMention = `@${user.split('@')[0]}`
+
+        if (action === 'add') {
             const welcomeText = `¡Bienvenido/a a ${groupName} ${userNameMention}!`
             
-            await conn.sendMessage(m.chat, { 
+            await conn.sendMessage(chat, { 
                 text: welcomeText,
-                mentions: [user] 
+                mentions: [user]
             })
 
-        } else if (m.type === 'remove') {
+        } else if (action === 'remove') {
             const goodbyeText = `Un usuario salió del grupo ${groupName}. ¡Adiós ${userNameMention}!`
             
-            await conn.sendMessage(m.chat, { 
+            await conn.sendMessage(chat, { 
                 text: goodbyeText,
-                mentions: [user] 
+                mentions: [user]
             })
         }
-
-    } catch (e) {
-        console.error('Error en participantsUpdate:', e)
     }
 }
