@@ -82,8 +82,6 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
 
     try {
-        const thumbnailUrl = global.fgThumb || 'https://files.catbox.moe/12zb63.jpg';
-        const sourceUrl = global.gataMiau || 'https://github.com/Shadows-club';
         const canalUrl = 'https://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W';
 
         const buttons = [
@@ -101,14 +99,6 @@ let handler = async (m, { conn, usedPrefix }) => {
             buttons: buttons,
             headerType: 1, 
             contextInfo: {
-                externalAdReply: { 
-                    title: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
-                    body: 'Echa un vistazo a mi GitHub!', 
-                    thumbnailUrl: thumbnailUrl,
-                    sourceUrl: sourceUrl,
-                    mediaType: 1,
-                    renderLargerThumbnail: true,
-                },
                 mentionedJid: [m.sender],
             }
         };
@@ -118,7 +108,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     } catch (e) {
         console.error('❌ Error al enviar el menú con botón:', e);
         await conn.sendMessage(m.chat, { text: menuText }, { quoted: m });
-        await m.reply('❌ Ocurrió un error al enviar el menú con botón. Se envió como texto simple. Por favor, reporta este error al dueño del bot.');
+        await m.reply('❌ Ocurrió un error al enviar el menú. Se envió como texto simple. Por favor, reporta este error al dueño del bot.');
     }
 };
 
