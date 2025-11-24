@@ -82,8 +82,6 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
 
     try {
-        const canalNombre = global.canalNombreM?.[0] || 'Shadow Bot - Canal';
-        const canalId = global.canalIdM?.[0] || ''; 
         const thumbnailUrl = global.fgThumb || 'https://files.catbox.moe/12zb63.jpg';
         const sourceUrl = global.gataMiau || 'https://github.com/Shadows-club';
         
@@ -91,8 +89,8 @@ let handler = async (m, { conn, usedPrefix }) => {
             text: menuText,
             contextInfo: {
                 externalAdReply: {
-                    title: canalNombre,
-                    body: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
+                    title: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
+                    body: 'Echa un vistazo a mi código!',
                     thumbnailUrl: thumbnailUrl,
                     sourceUrl: sourceUrl,
                     mediaType: 1,
@@ -100,11 +98,6 @@ let handler = async (m, { conn, usedPrefix }) => {
                 },
                 mentionedJid: [m.sender],
                 isForwarded: true,
-                forwardedNewsletterMessageInfo: canalId && canalId.includes('@newsletter') ? {
-                    newsletterJid: canalId,
-                    newsletterName: '𝖲𝗁𝖺𝖽𝗈𝗐 - 𝖡𝗈ƚ',
-                    serverMessageId: -1
-                } : undefined
             }
         }, { quoted: m });
     } catch (e) {
