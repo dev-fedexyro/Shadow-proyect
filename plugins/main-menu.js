@@ -1,4 +1,4 @@
-ler;let tags = {
+let tags = {
   info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
   anime: 'ᴀɴɪᴍᴇ & ᴡᴀɪғᴜs',
   buscador: 'ʙᴜsᴄᴀᴅᴏʀᴇs',
