@@ -1,7 +1,7 @@
 import yts from "yt-search"
 import fetch from "node-fetch"
 
-const handler = async (m, { conn, text, command }) => {
+const handler = async (m, { conn, text, command, m, global.rcanal }) => {
   if (!text) return m.reply(`*— Comando de Descarga —*
 
 Proporciona el nombre o el enlace de YouTube del video/audio que deseas buscar o descargar.`)
@@ -56,10 +56,7 @@ No se encontraron videos para tu búsqueda. Intenta con un término más preciso
 
   } catch (error) {
     console.error("Error general:", error)
-    await m.reply(`*— Error en la Ejecución —*
-
-Ocurrió un error inesperado al procesar la solicitud.
-Detalle: ${error.message}`)
+    await m.reply(`${error.message}`)
     await m.react("⚠️")
   }
 }
@@ -113,13 +110,7 @@ El archivo ha sido enviado con éxito.`
 
   } catch (error) {
     console.error("Error descargando:", error)
-    const errorMsg = `*— Error de Operación —*
-
-*Título:* ${title}
-No se pudo completar la descarga.
-Detalle: ${error.message}`
-
-    await m.reply(errorMsg)
+    await m.reply(`${error.message}`)
     await m.react("❌")
   }
 }
