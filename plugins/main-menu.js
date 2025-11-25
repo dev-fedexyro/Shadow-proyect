@@ -76,7 +76,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
     let menuText = [
       defaultMenu.before,
 ...Object.keys(tags)
-      
         .filter(tag => help.some(menu => menu.tags.includes(tag) && menu.help))
         .map(tag => {
           let section = help.filter(menu => menu.tags.includes(tag) && menu.help)
@@ -118,23 +117,20 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
 
     let text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
 
-    await m.react('⭐')
-    await conn.sendMessage(m.chat, {
+    let buttonMessage = {
       video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'},
       gifPlayback: true,
       caption: text.trim(),
       mentions: [m.sender],
-      contextInfo: {
-        externalAdReply: {
-          title: 'Shadow Ultra MD',
-          body: 'Shadow Bot',
-          thumbnailUrl: 'https://files.catbox.moe/12zb63.jpg',
-          mediaType: 2,
-          mediaUrl: 'https://cdn.russellxz.click/14cf14e9.mp4',
-          renderLargerThumbnail: true
-        }
-      }
-}, { quoted: m})
+      footer: 'Usa el botón para ver el código.',
+      buttons: [
+        { buttonId: '.code', buttonText: { displayText: 'SRR SUB-BOT'}, type: 1}
+      ],
+      headerType: 4
+    }
+
+    await m.react('⭐')
+    await conn.sendMessage(m.chat, buttonMessage, { quoted: m})
 
 } catch (e) {
     await m.react('✖️')
@@ -162,4 +158,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-      }
+                             }
