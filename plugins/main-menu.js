@@ -31,8 +31,12 @@ function clockString(seconds) {
 let handler = async (m, { conn, usedPrefix }) => {
     const ICON_URL = 'https://files.catbox.moe/12zb63.jpg';
     const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4';
-    const EP_TITLE = 'Shadow Ultra MD';
-    const BODY = 'Shadow bot';
+    const EP_TITLE = 'Shadow subbots';
+    const BODY = 'Shadow Bot';
+    
+    const NEWSLETTER_NAME = 'Shadow bot channel';
+    const NEWSLETTER_JID = '120363420231014623@newsletter';
+    const NEWSLETTER_URL = 'https://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W';
 
     const nombre = await conn.getName(m.sender);
     const totalreg = Object.keys(global.db.data.users).length;
@@ -86,37 +90,32 @@ let handler = async (m, { conn, usedPrefix }) => {
         }
     }
 
+    const baseContext = {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        externalAdReply: { 
+            title: EP_TITLE,
+            body: BODY,
+            sourceUrl: NEWSLETTER_URL,
+            thumbnailUrl: ICON_URL,
+            newsletterName: NEWSLETTER_NAME,
+            newsletterJid: NEWSLETTER_JID
+        }
+    };
+
     try {
         await conn.sendMessage(m.chat, {
             video: { url: VIDEO_URL }, 
             caption: menuText,
             gifPlayback: true,
-            contextInfo: { 
-                mentionedJid: [m.sender],
-                isForwarded: true,
-                externalAdReply: { 
-                    title: EP_TITLE,
-                    body: BODY,
-                    mediaType: 2, 
-                    thumbnailUrl: ICON_URL
-                }
-            }
+            contextInfo: { ...baseContext, externalAdReply: { ...baseContext.externalAdReply, mediaType: 2 } }
         }, { quoted: m });
     } catch (e) {
-        console.error('❌ Error al enviar el menú:', e);
+        console.error('❌ Error al enviar el menú con video:', e);
         try {
             await conn.sendMessage(m.chat, {
                 text: menuText,
-                contextInfo: { 
-                    mentionedJid: [m.sender],
-                    isForwarded: true,
-                    externalAdReply: {
-                        title: EP_TITLE,
-                        body: BODY,
-                        mediaType: 1,
-                        thumbnailUrl: ICON_URL
-                    }
-                }
+                contextInfo: { ...baseContext, externalAdReply: { ...baseContext.externalAdReply, mediaType: 1 } }
             }, { quoted: m });
         } catch (e2) {
             console.error('❌ Error en el fallback del menú:', e2);
