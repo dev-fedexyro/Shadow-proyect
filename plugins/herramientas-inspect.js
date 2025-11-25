@@ -82,7 +82,7 @@ let handler = async (m, { conn, command, args, text }) => {
                 await conn.sendMessage(m.chat, { text: info, contextInfo: {
                     mentionedJid: conn.parseMention(info),
                     externalAdReply: {
-                        title: `Inspector de IDs`,
+                        title: `Shadow - Inspector de IDS`,
                         body: `¡Super Inspectador!`,
                         thumbnailUrl: pp ? pp : thumb,
                         sourceUrl: args[0] ? args[0] : inviteCode ? `https://chat.whatsapp.com/${inviteCode}` : md,
