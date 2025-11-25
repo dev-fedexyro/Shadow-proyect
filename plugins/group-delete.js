@@ -1,7 +1,7 @@
 const handler = async (m, { conn}) => {
 
   if (!m.quoted) {
-    return conn.reply(m.chat, '\`\`\`🌱 Por favor, menciona al usuario que deseas eliminar.\`\`\`', m);
+    return conn.reply(m.chat, '\`\`\`🌱 Por favor, Responde al mensaje del usuario que desea eliminar el mensaje.\`\`\`', m);
 }
 
   try {
