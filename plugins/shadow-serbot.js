@@ -147,17 +147,17 @@ export async function ShadowJadiBot(options) {
                         const interactiveButtons = [{
                             name: "cta_copy",
                             buttonParamsJson: JSON.stringify({
-                                display_text: "Copiar Código",
+                                display_text: "Cᴏᴘɪᴀʀ Cᴏ́ᴅɪɢᴏ",
                                 id: "copy-shadowbot-code",
                                 copy_code: rawCode
                             })
                         }];
 
                         const interactiveMessage = {
-                            image: { url: "https://files.catbox.moe/bszv0y.jpg" },
-                            caption: `*✨ ¡Tu código de vinculación está listo! ✨*\n\nUsa el siguiente código para conectarte como Sub-Bot:\n\n> Haz clic en el botón de abajo para copiarlo fácilmente.`,
-                            title: "Código de Vinculación",
-                            footer: "Este código expirará en 45 segundos.",
+                            image: { url: "https://files.catbox.moe/bszv0y.jpg"},
+                            caption: `*🌵 ¡Tᴜ ᴄᴏ́ᴅɪɢᴏ ᴅᴇ ᴠɪɴᴄᴜʟᴀᴄɪᴏ́ɴ ᴇsᴛᴀ́ ʟɪsᴛᴏ! 🌱*\n\nÚsᴀ ᴇʟ sɪɢᴜɪᴇɴᴛᴇ ᴄᴏ́ᴅɪɢᴏ ᴘᴀʀᴀ ᴄᴏɴᴇᴄᴛᴀʀᴛᴇ ᴄᴏᴍᴏ Sᴜʙ-Bᴏᴛ:\n\n*Cᴏ́ᴅɪɢᴏ:* ${formattedCode}\n\n> Hᴀᴢ ᴄʟɪᴄ ᴇɴ ᴇʟ ʙᴏᴛᴏ́ɴ ᴅᴇ ᴀʙᴀᴊᴏ ᴘᴀʀᴀ ᴄᴏᴘɪᴀʀʟᴏ ғᴀ́ᴄɪʟᴍᴇɴᴛᴇ.`,
+                            title: "Sʜᴀᴅᴏᴡ Bᴏᴛ Oғғɪᴄɪᴀʟ",
+                            footer: "Esᴛᴇ ᴄᴏ́ᴅɪɢᴏ ᴇxᴘɪʀᴀʀᴀ́ ᴇɴ 45 sᴇɢᴜɴᴅᴏs.",
                             interactiveButtons
                         };
                         
