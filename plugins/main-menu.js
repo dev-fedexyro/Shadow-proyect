@@ -24,9 +24,9 @@ let tags = {
 const defaultMenu = {
   before: `
 *─ׄ─ׅ─ׄ─⭒ Bienvenido %name ⭒─ׄ─ׅ─ׄ─*
-“Hola *%name*, soy *Shadow - Bot*, %greeting”
+“Hola *%name*, soy *Shadow Bot*, %greeting”
 
-╭── ⭒ SHADOW ULTRA MD⭒
+╭── 👤 Shadow Ultra MD
 │ 🍬 Modo: *Público*
 │ 📚 Baileys: *Multi Device*
 │ ⏱ Tiempo Activo: *%uptime*
@@ -65,24 +65,33 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       enabled:!plugin.disabled
 }))
 
-    for (let plugin of help)
-      if (plugin && plugin.tags)
-        for (let tag of plugin.tags)
+    for (let plugin of help) {
+      if (plugin && plugin.tags) {
+        for (let tag of plugin.tags) {
           if (!(tag in tags)) tags[tag] = tag
+        }
+      }
+    }
 
     let menuText = [
       defaultMenu.before,
-...Object.keys(tags).map(tag => {
-        let section = help.filter(menu => menu.tags.includes(tag) && menu.help)
-.map(menu => menu.help.map(cmd =>
-            defaultMenu.body
-.replace(/%cmd/g, menu.prefix? cmd: _p + cmd)
-.replace(/%islimit/g, menu.limit? '◜⭐◞': '')
-.replace(/%isPremium/g, menu.premium? '◜🪪◞': '')
-).join('\n')).join('\n')
+...Object.keys(tags)
+        // Solo incluye categorías con comandos disponibles y activos
+        .filter(tag => help.some(menu => menu.tags.includes(tag) && menu.help))
+        .map(tag => {
+          let section = help.filter(menu => menu.tags.includes(tag) && menu.help)
+            .map(menu => menu.help.map(cmd =>
+              defaultMenu.body
+                .replace(/%cmd/g, menu.prefix? cmd: _p + cmd)
+                .replace(/%islimit/g, menu.limit? '◜⭐◞': '')
+                .replace(/%isPremium/g, menu.premium? '◜🪪◞': '')
+            ).join('\n')).join('\n')
 
-        return defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer
-}),
+          if (section.trim()) {
+            return defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer
+          }
+          return ''
+        }),
       defaultMenu.after
     ].join('\n')
 
@@ -114,7 +123,16 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'},
       gifPlayback: true,
       caption: text.trim(),
-      mentions: [m.sender]
+      mentions: [m.sender],
+      contextInfo: {
+        externalAdReply: {
+          title: 'Shadow Ultra MD',
+          body: 'Shadow Bot',
+          thumbnailUrl: 'https://files.catbox.moe/12zb63.jpg',
+          mediaType: 1,
+          renderLargerThumbnail: true
+        }
+      }
 }, { quoted: m})
 
 } catch (e) {
@@ -143,4 +161,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-      }
+                                                                                              }
