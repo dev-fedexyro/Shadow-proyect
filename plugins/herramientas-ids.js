@@ -26,7 +26,7 @@ let handler = async (m, { conn, command, args, text }) => {
     let md = 'https://github.com/dev-fedexyzz'
 
     if (!text) {
-        return conn.reply(m.chat, '⚠️ Por favor, ingresa el *ID/JID* de un canal, grupo o comunidad para generar su URL.\n\n*Ejemplos:*\n`.id 1234567890@newsletter` (Canal)\n`.id 1234567890@g.us` (Grupo/Comunidad)', m)
+        return conn.reply(m.chat, '\`\`\`ⓘ Por favor, ingresa el *ID/JID* de un canal, grupo o comunidad para generar su URL.\`\`\`', m)
     }
 
     let result = ''
