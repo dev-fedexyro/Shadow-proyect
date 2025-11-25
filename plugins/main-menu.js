@@ -24,7 +24,7 @@ let tags = {
 const defaultMenu = {
   before: `
 *□─ׄ─ׅ─ׄ─⭒ 𝑩𝒊𝒆𝒏𝒗𝒆𝒏𝒊𝒅𝒐 %name ⭒─ׄ─ׅ─ׄ─□*
-“Hola \`\`\`%name\`\`\`, soy \`\`\`Shadow Bot\`\`\`, %greeting”
+“Hola \`%name`\, soy *\`ShadowBot`\*, %greeting”
 
 ╭── \`\`\`ꜱʜᴀᴅᴏᴡ ᴜʟᴛʀᴀ ᴍᴅ\`\`\`
 │ 🌵 Modo: *Privado*
