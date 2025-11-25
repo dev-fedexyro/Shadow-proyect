@@ -1,7 +1,3 @@
-/* Codigo creado por dev-fedexyz 
-* github: https://github.com/dev-fedexyro
-* no sabes créditos puta*/
-
 let handler = async (m, { conn, command, args, text }) => {
     const isCommandId = /^(id)$/i.test(command)
     
@@ -49,17 +45,19 @@ let handler = async (m, { conn, command, args, text }) => {
         title = 'Generador de URL de Canal'
         try {
             const inviteCodeResult = await conn.getNewsletterInviteCode(targetJid)
-            const inviteCode = inviteCodeResult.code 
+            
+            const inviteCode = inviteCodeResult && inviteCodeResult.code ? inviteCodeResult.code : null
             
             if (inviteCode) {
                 const channelUrl = `https://whatsapp.com/channel/${inviteCode}`
                 result = `*✅ URL DE CANAL GENERADA*\n\n*ID:* \`${targetJid}\`\n*URL:* ${channelUrl}`
                 pp = await conn.profilePictureUrl(targetJid, 'image').catch(() => icons)
             } else {
-                result = `❌ No se pudo obtener el código de invitación para el ID de Canal: ${targetJid}`
+                result = `❌ No se pudo obtener el código de invitación para el ID de Canal: ${targetJid}.\n\n*Posiblemente:* ID incorrecto o Bot no autorizado.`
             }
         } catch (e) {
-            result = `❌ Error al generar URL de Canal. Verifique que el ID sea correcto.`
+            result = `❌ Error al generar URL de Canal.\n*Mensaje de Error:* ${e.message}`
+            console.error("Error al obtener URL del canal:", e)
         }
 
     } else if (targetJid.includes('@g.us')) {
@@ -71,10 +69,11 @@ let handler = async (m, { conn, command, args, text }) => {
                 result = `*✅ URL DE GRUPO/COMUNIDAD GENERADA*\n\n*ID:* \`${targetJid}\`\n*URL:* ${groupUrl}`
                 pp = await conn.profilePictureUrl(targetJid, 'image').catch(() => icons)
             } else {
-                result = `❌ No se pudo obtener el código de invitación para el ID de Grupo/Comunidad: ${targetJid}.\n\n*Nota:* Asegúrese de que el bot sea administrador del grupo o que las invitaciones estén habilitadas.`
+                result = `❌ No se pudo obtener el código de invitación para el ID: ${targetJid}.\n\n*Posiblemente:* El bot NO es administrador del grupo/anuncios.`
             }
         } catch (e) {
-            result = `❌ Error al generar URL de Grupo/Comunidad. Verifique que el ID sea correcto.`
+            result = `❌ Error al generar URL de Grupo/Comunidad.\n*Mensaje de Error:* ${e.message}`
+            console.error("Error al obtener URL del grupo/comunidad:", e)
         }
     } else {
         result = '❌ ID/JID no reconocido. No se pudo determinar si es Canal o Grupo/Comunidad.'
