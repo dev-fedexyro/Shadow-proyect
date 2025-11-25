@@ -15,16 +15,23 @@ const chat = global.db.data.chats[m.chat]
 const users = m.messageStubParameters[0]
 const usuario = await resolveLidToRealJid(m?.sender, conn, m?.chat)
 const groupAdmins = participants.filter(p => p.admin)
-const rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: '', newsletterName: channelRD.name }, externalAdReply: { title: "🔔 ¡AVISO IMPORTANTE! 💬", body: textbot, mediaUrl: null, description: null, previewType: "PHOTO", thumbnail: await (await fetch(icono)).buffer(), sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, mentionedJid: null }}
-const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || 'https://files.catbox.moe/xr2m6u.jpg'
 
-const nombre = `> ✏️ @${usuario.split('@')[0]} ha cambiado el nombre del grupo.\n> ✨ Nuevo nombre:\n> *${m.messageStubParameters[0]}*.`
-const foto = `> 📸 Se ha cambiado la imagen del grupo.\n> 👤 Acción hecha por:\n> » @${usuario.split('@')[0]}`
-const edit = `> ⚙️ @${usuario.split('@')[0]} ha permitido que ${m.messageStubParameters[0] == 'on' ? 'solo admins' : 'todos'} puedan configurar el grupo.`
-const newlink = `> 🔗 El enlace del grupo ha sido restablecido.\n> 👤 Acción hecha por:\n> » @${usuario.split('@')[0]}`
-const status = `> 📢 El grupo ha sido ${m.messageStubParameters[0] == 'on' ? '*cerrado*' : '*abierto*'} por @${usuario.split('@')[0]}\n> ➡️ Ahora ${m.messageStubParameters[0] == 'on' ? '*solo admins*' : '*todos*'} pueden enviar mensaje.`
-const admingp = `> 👑 @${users.split('@')[0]} ahora es admin del grupo.\n> 👤 Acción hecha por:\n> » @${usuario.split('@')[0]}`
-const noadmingp = `> 🔻 @${users.split('@')[0]} deja de ser admin del grupo.\n> 👤 Acción hecha por:\n> » @${usuario.split('@')[0]}`
+const channelRD = { id: '120363236353920958@newsletter', name: '🤖 BOTS NEWS' }
+const textbot = 'Notificación de Bot Activa!'
+const icono = 'https://files.catbox.moe/bszv0y.jpg'
+const redes = 'https://github.com/dev-fedexyzz'
+const sessions = 'sessions'
+
+const rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: '', newsletterName: channelRD.name }, externalAdReply: { title: "🔔 ¡AVISO IMPORTANTE! 💬", body: textbot, mediaUrl: null, description: null, previewType: "PHOTO", thumbnail: await (await fetch(icono)).buffer(), sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, mentionedJid: null }}
+const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || icono
+
+const nombre = `> 📝 *Nombre Actualizado:*\n> ✨ *Título:* *${m.messageStubParameters[0]}*\n> 👤 *Hecho por:* @${usuario.split('@')[0]}`
+const foto = `> 🖼️ *Imagen del Grupo Cambiada.*\n> 👤 *Hecho por:* @${usuario.split('@')[0]}`
+const edit = `> ⚙️ *Configuración de Edición:*\n> 🔒 @${usuario.split('@')[0]} ha permitido que ${m.messageStubParameters[0] == 'on' ? 'solo *Administradores*' : '*todos*'} puedan configurar el grupo.`
+const newlink = `> 🔗 *Enlace Restablecido.*\n> ♻️ Se ha generado un nuevo link de invitación.\n> 👤 *Hecho por:* @${usuario.split('@')[0]}`
+const status = `> 📢 *Estado de Mensajes:*\n> @${usuario.split('@')[0]} ha ${m.messageStubParameters[0] == 'on' ? '*CERRADO* (Solo Admins envían)' : '*ABIERTO* (Todos pueden enviar)'} el grupo.`
+const admingp = `> 👑 *ASCENSO A ADMINISTRADOR*\n> ⬆️ Usuario: @${users.split('@')[0]}\n> 👤 *Hecho por:* @${usuario.split('@')[0]}`
+const noadmingp = `> 🔻 *DESCENSO DE ADMINISTRADOR*\n> ⬇️ Usuario: @${users.split('@')[0]} (Ya no es Admin)\n> 👤 *Hecho por:* @${usuario.split('@')[0]}`
 
 if (chat.detect && m.messageStubType == 2) {
 const uniqid = (m.isGroup ? m.chat : m.sender).split('@')[0]
@@ -94,4 +101,4 @@ return inputJid
 await new Promise((resolve) => setTimeout(resolve, retryDelay))
 }}
 return inputJid
-}
+                                                                                                                                                                                                                                                                                                                                   }
