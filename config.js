@@ -18,9 +18,9 @@ global.ShadowJadibts = true
 
 // ===
 
-global.botname = "Sʜᴀᴅᴏᴡ - Bᴏᴛ"
+global.botname = "🌵◌₊ Tʜᴇ Sʜᴀᴅᴏᴡ-Bᴏᴛ ◌❐"
 global.textbot = "© 𝘚𝘩𝘢𝘥𝘰𝘸 - 𝘉𝘰𝘵 • 𝘍𝘦𝘥𝘦 𝘜𝘤𝘩𝘪𝘩𝘢"
-global.dev = "𝐅𝐞𝐝𝐞 𝐔𝐜𝐡𝐢𝐡𝐚"
+global.dev = " ⎧ 🌱 ୧ 𝐅𝐞𝐝𝐞 𝐔𝐜𝐡𝐢𝐡𝐚 🌵⋅ ..⃗."
 global.author = "𝘍𝘦𝘥𝘦 𝘜𝘤𝘩𝘪𝘩𝘢"
 global.etiqueta = "𝘍𝘦𝘥𝘦 𝘜𝘤𝘩𝘪𝘩𝘢"
 global.currency = "Yenes"
