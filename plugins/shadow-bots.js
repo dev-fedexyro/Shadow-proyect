@@ -1,5 +1,13 @@
 import ws from "ws";
 
+async function getBufferFromUrl(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Error al descargar la imagen: ${response.statusText}`);
+    }
+    return Buffer.from(await response.arrayBuffer());
+}
+
 function convertirMsADiasHorasMinutosSegundos(ms) {
     if (ms < 0) return "Desconocido";
 
@@ -23,6 +31,15 @@ function convertirMsADiasHorasMinutosSegundos(ms) {
 
 const handler = async (m, { conn, usedPrefix, command, participants }) => {
     try {
+        const thumbnailURL = 'https://files.catbox.moe/hv7nvc.jpg';
+        let thumbnailBase64 = null;
+        try {
+             const buffer = await getBufferFromUrl(thumbnailURL);
+             thumbnailBase64 = buffer.toString('base64');
+        } catch (e) {
+             console.error("Error al obtener la miniatura, se omitirá.", e);
+        }
+        
         const activeBotsJids = [
             global.conn.user.jid,
             ...new Set(global.conns
@@ -67,9 +84,20 @@ ${botsGroupDetails}`;
         
         const contextInfo = { 
             contextInfo: { 
-                mentionedJid: mentionList 
+                mentionedJid: mentionList,
+                externalAdReply: { 
+                    title: "Shadow subbots",
+                    body: "Shadow Bot",
+                    sourceUrl: "https://github.com/",
+                    thumbnail: thumbnailBase64 ? Buffer.from(thumbnailBase64, 'base64') : undefined,
+                    mediaType: 1
+                }
             }
         };
+
+        if (thumbnailBase64) {
+             contextInfo.contextInfo.jpegThumbnail = Buffer.from(thumbnailBase64, 'base64');
+        }
 
         await conn.sendMessage(m.chat, { text: message, ...contextInfo }, { quoted: m });
 
@@ -82,7 +110,7 @@ ${botsGroupDetails}`;
 };
 
 handler.tags = ["serbot"];
-handler.help = ["botlist"];
-handler.command = ["botlist", "listbots", "listbot", "bots", "sockets", "socket", "shadowbots", "shadowbot"];
+handler.help = ["botlist", "listbots", "listbot", "bots", "shadowbots", "shadowbot"];
+handler.command = ["botlist", "listbots", "listbot", "bots", "shadowbots", "shadowbot"];
 
 export default handler;
