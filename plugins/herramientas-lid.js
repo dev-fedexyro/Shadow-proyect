@@ -27,6 +27,11 @@ let handler = async (m, { conn, command, args, text }) => {
     
     let numberClean = jidResult.split('@')[0];
     
+    const jidPersonal = `${numberClean}@s.whatsapp.net`;
+    const jidCanal = `${numberClean}@newsletter`;
+    const jidGrupo = `${numberClean}@g.us`;
+    const jidStatus = `status@broadcast`; 
+    
     let fkontak = { 
         "key": { 
             "participants":"0@s.whatsapp.net", 
@@ -46,12 +51,22 @@ let handler = async (m, { conn, command, args, text }) => {
     let md = 'https://github.com/dev-fedexyzz';
 
     const caption = `
-*✅ Información de Usuario (JID/LID)*
+*✅ JIDs (Identificadores) del Número:*
 
-*Número de WhatsApp:* \`+${numberClean}\`
+*Número Base:* \`+${numberClean}\`
 
-*JID (Linked ID) Completo:*
-\`${jidResult}\`
+---
+*Identificador Principal (Usuario/LID):*
+\`${jidPersonal}\`
+
+*Identificador de Canal (Formato JID):*
+\`${jidCanal}\`
+
+*Identificador de Grupo/Comunidad (Formato JID):*
+\`${jidGrupo}\`
+
+*Identificador de Estado (Para referencia):*
+\`${jidStatus}\`
 `;
     
     let pp;
@@ -83,3 +98,4 @@ handler.help = ['lid', 'lidnum', 'lid <@mención|número>'];
 handler.command = ['lid', 'lidnum'];
 
 export default handler;
+
