@@ -86,8 +86,8 @@ ${botsGroupDetails}`;
             contextInfo: { 
                 mentionedJid: mentionList,
                 externalAdReply: { 
-                    title: "Shadow subbots",
-                    body: "Shadow Bot",
+                    title: "ᴏᴡɴᴇʀ: ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ",
+                    body: "ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ",
                     sourceUrl: "https://github.com/",
                     thumbnail: thumbnailBase64 ? Buffer.from(thumbnailBase64, 'base64') : undefined,
                     mediaType: 1
