@@ -3,31 +3,28 @@ import { join} from 'path'
 import { xpRange} from '../lib/levelling.js'
 
 let tags = {
-  main: 'Información',
-  search: 'Búsqueda',
-  game: 'Juegos',
-  serbot: 'Sub-Bots',
-  rpg: 'RPG',
-  rg: 'Registro',
-  sticker: 'Stickers',
-  img: 'Imágenes',
-  group: 'Grupos',
-  nable: 'Activar/Desactivar',
-  premium: 'Premium',
-  downloader: 'Descargas',
-  tools: 'Herramientas',
-  fun: 'Diversión',
-  nsfw: 'NSFW',
-  cmd: 'Base de Datos',
-  owner: 'Creador',
-  audio: 'Audios',
-  advanced: 'Avanzado'
-}
+  info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
+  anime: 'ᴀɴɪᴍᴇ & ᴡᴀɪғᴜs',
+  buscador: 'ʙᴜsᴄᴀᴅᴏʀᴇs',
+  downloader: 'ᴅᴇsᴄᴀʀɢᴀs',
+  economy: 'ᴇᴄᴏɴᴏᴍɪ́ᴀ & ᴊᴜᴇɢᴏs',
+  fun: 'ᴊᴜᴇɢᴏs ᴅɪᴠᴇʀᴛɪᴅᴏs',
+  group: 'ғᴜɴᴄɪᴏɴᴇs ᴅᴇ ɢʀᴜᴘᴏ',
+  ai: 'ɪɴᴛᴇʟɪɢᴇɴᴄɪᴀ ᴀʀᴛғɪᴄɪᴀʟ',
+  game: 'ᴊᴜᴇɢᴏs ᴄʟᴀ́sɪᴄᴏs',
+  serbot: 'sᴜʙ-ʙᴏᴛs',
+  main: 'ᴄᴏᴍᴀɴᴅᴏs ᴘʀɪɴᴄɪᴘᴀʟᴇs',
+  nable: 'ᴀᴄᴛɪᴠᴀʀ / ᴅᴇsᴀᴄᴛɪᴠᴀʀ',
+  nsfw: 'ɴsғᴡ',
+  owner: 'ᴅᴜᴇñᴏ / ᴀᴅᴍɪɴ',
+  sticker: 'sᴛɪᴄᴋᴇʀs & ʟᴏɢᴏs',
+  herramientas: 'ʜᴇʀʀᴀᴍɪᴇɴᴛᴀs'
+};
 
 const defaultMenu = {
   before: `
 *─ׄ─ׅ─ׄ─⭒ Bienvenido %name ⭒─ׄ─ׅ─ׄ─*
-“Hola *%name*, soy *Ai Hoshino*, %greeting”
+“Hola *%name*, soy *Shadow - Bot*, %greeting”
 
 ╭── ⭒ SHADOW ULTRA MD⭒
 │ 🍬 Modo: *Público*
@@ -44,8 +41,8 @@ const defaultMenu = {
 `.trim(),
 
   body: '│ ➤ %cmd %islimit %isPremium',
-  footer: '╰───────────────────────\n',
-  after: '> [ ✰ ] %textbot'
+  footer: '╰──────────\n',
+  after: ''
 }
 
 let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
