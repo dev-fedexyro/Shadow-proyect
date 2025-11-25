@@ -1,3 +1,7 @@
+/* Codigo creado por dev-fedexyz 
+* github: https://github.com/dev-fedexyro
+* no sabes créditos puta*/
+
 let handler = async (m, { conn, command, args, text }) => {
     const isCommand1 = /^(inspect|inspeccionar)\b$/i.test(command)
     
