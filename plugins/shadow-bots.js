@@ -86,8 +86,8 @@ ${botsGroupDetails}`;
             contextInfo: { 
                 mentionedJid: mentionList,
                 externalAdReply: { 
-                    title: "ᴏᴡɴᴇʀ: ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ",
-                    body: "ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ",
+                    title: "ᴏᴡɴᴇʀ: ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ 👑",
+                    body: "ʙᴏᴛ: ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ 🌱",
                     sourceUrl: "https://github.com/",
                     thumbnail: thumbnailBase64 ? Buffer.from(thumbnailBase64, 'base64') : undefined,
                     mediaType: 1
