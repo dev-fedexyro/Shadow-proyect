@@ -32,7 +32,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     const ICON_URL = 'https://files.catbox.moe/12zb63.jpg';
     const VIDEO_URL = 'https://cdn.russellxz.click/14cf14e9.mp4';
     const EP_TITLE = 'Shadow Ultra MD';
-    const BODY = 'Shadow bot';
+    const BODY = 'ꜱʜᴀᴅᴏᴡ ʙᴏᴛ';
 
     const nombre = await conn.getName(m.sender);
     const totalreg = Object.keys(global.db.data.users).length;
