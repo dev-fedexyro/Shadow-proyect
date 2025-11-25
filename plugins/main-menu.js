@@ -26,7 +26,7 @@ const defaultMenu = {
 *─ׄ─ׅ─ׄ─⭒ Bienvenido %name ⭒─ׄ─ׅ─ׄ─*
 “Hola *%name*, soy *Shadow Bot*, %greeting”
 
-╭── 👤 Shadow Ultra MD
+╭── 𝗦𝗵𝗮𝗱𝗼𝘄 𝗨𝗹𝘁𝗿𝗮 𝗠𝗗
 │ 🍬 Modo: *Público*
 │ 📚 Baileys: *Multi Device*
 │ ⏱ Tiempo Activo: *%uptime*
@@ -36,8 +36,7 @@ const defaultMenu = {
 `.trim(),
 
   header: `
-╭── ⭒ *%category*
-│ 
+╭── ⭒ *%category* 
 `.trim(),
 
   body: '│ ➩ %cmd %islimit %isPremium',
@@ -122,14 +121,14 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       gifPlayback: true,
       caption: text.trim(),
       mentions: [m.sender],
-      footer: 'Usa el botón para ver el código.',
+      footer: '*_usa el botón de abajo para ser Sub-Bot._*',
       buttons: [
-        { buttonId: '.code', buttonText: { displayText: 'SRR SUB-BOT'}, type: 1}
+        { buttonId: '.code', buttonText: { displayText: 'ꜱᴇʀ ꜱᴜʙ-ʙᴏᴛ'}, type: 1}
       ],
       headerType: 4
     }
 
-    await m.react('⭐')
+    await m.react('🌑')
     await conn.sendMessage(m.chat, buttonMessage, { quoted: m})
 
 } catch (e) {
