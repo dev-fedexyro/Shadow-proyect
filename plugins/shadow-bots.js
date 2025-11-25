@@ -70,7 +70,7 @@ const handler = async (m, { conn, usedPrefix, command, participants }) => {
 
         const totalSubs = activeBotsJids.length - 1;
 
-        const message = `*「 🌱 」 Lista de Bots Activos (Shadow-Bots)*
+        const message = `\`\`\`「 🌱 」 Lista de Bots Activos (Shadow-Bots)\`\`\`
 
 *🌑 Bots Totales:* ${activeBotsJids.length}
 *↳ Principal:* 1
@@ -86,8 +86,8 @@ ${botsGroupDetails}`;
             contextInfo: { 
                 mentionedJid: mentionList,
                 externalAdReply: { 
-                    title: "ᴏᴡɴᴇʀ: ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ 👑",
-                    body: "ʙᴏᴛ: ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ 🌱",
+                    title: "ᴏᴡɴᴇʀ: ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ 🌵",
+                    body: "ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ 🌱",
                     sourceUrl: "https://github.com/",
                     thumbnail: thumbnailBase64 ? Buffer.from(thumbnailBase64, 'base64') : undefined,
                     mediaType: 1
