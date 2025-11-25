@@ -16,13 +16,13 @@ const users = m.messageStubParameters[0]
 const usuario = await resolveLidToRealJid(m?.sender, conn, m?.chat)
 const groupAdmins = participants.filter(p => p.admin)
 
-const channelRD = { id: '120363236353920958@newsletter', name: '🤖 BOTS NEWS' }
+const channelRD = { id: '120363420231014623@newsletter', name: '🌵◌₊ Sʜᴀᴅᴏᴡ Bᴏᴛ Oғғɪᴄɪᴀʟ ◌❐🌵' }
 const textbot = 'Notificación de Bot Activa!'
 const icono = 'https://files.catbox.moe/bszv0y.jpg'
 const redes = 'https://github.com/dev-fedexyzz'
 const sessions = 'sessions'
 
-const rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: '', newsletterName: channelRD.name }, externalAdReply: { title: "🔔 ¡AVISO IMPORTANTE! 💬", body: textbot, mediaUrl: null, description: null, previewType: "PHOTO", thumbnail: await (await fetch(icono)).buffer(), sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, mentionedJid: null }}
+const rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: '', newsletterName: channelRD.name }, externalAdReply: { title: "🔔 . : : N O T I F I C A C I Ó N : : . 💬", body: textbot, mediaUrl: null, description: null, previewType: "PHOTO", thumbnail: await (await fetch(icono)).buffer(), sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, mentionedJid: null }}
 const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || icono
 
 const nombre = `> 📝 *Nombre Actualizado:*\n> ✨ *Título:* *${m.messageStubParameters[0]}*\n> 👤 *Hecho por:* @${usuario.split('@')[0]}`
