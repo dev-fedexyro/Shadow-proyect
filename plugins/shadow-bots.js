@@ -31,7 +31,7 @@ function convertirMsADiasHorasMinutosSegundos(ms) {
 
 const handler = async (m, { conn, usedPrefix, command, participants }) => {
     try {
-        const thumbnailURL = 'https://files.catbox.moe/hv7nvc.jpg';
+        const thumbnailURL = 'https://files.catbox.moe/bszv0y.jpg';
         let thumbnailBase64 = null;
         try {
              const buffer = await getBufferFromUrl(thumbnailURL);
@@ -86,8 +86,8 @@ ${botsGroupDetails}`;
             contextInfo: { 
                 mentionedJid: mentionList,
                 externalAdReply: { 
-                    title: "ᴏᴡɴᴇʀ: ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ 🌵",
-                    body: "ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ 🌱",
+                    title: "ꜰᴇᴅᴇ ᴜᴄʜɪʜᴀ 🌵",
+                    body: "🌵◌ ꜱʜᴀᴅᴏᴡ ꜱᴜʙ-ʙᴏᴛꜱ ◌❐🌱༉",
                     sourceUrl: "https://github.com/",
                     thumbnail: thumbnailBase64 ? Buffer.from(thumbnailBase64, 'base64') : undefined,
                     mediaType: 1
