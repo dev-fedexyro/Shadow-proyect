@@ -23,10 +23,10 @@ let tags = {
 
 const defaultMenu = {
   before: `
-*─ׄ─ׅ─ׄ─⭒ Bienvenido %name ⭒─ׄ─ׅ─ׄ─*
+*─ׄ─ׅ─ׄ─⭒ 𝑩𝒊𝒆𝒏𝒗𝒆𝒏𝒊𝒅𝒐 %name ⭒─ׄ─ׅ─ׄ─*
 “Hola *%name*, soy *Shadow Bot*, %greeting”
 
-╭── 𝗦𝗵𝗮𝗱𝗼𝘄 𝗨𝗹𝘁𝗿𝗮 𝗠𝗗
+╭── ꜱʜᴀᴅᴏᴡ ᴜʟᴛʀᴀ ᴍᴅ
 │ 🍬 Modo: *Público*
 │ 📚 Baileys: *Multi Device*
 │ ⏱ Tiempo Activo: *%uptime*
