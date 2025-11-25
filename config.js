@@ -4,10 +4,6 @@ import { fileURLToPath } from "url"
 import fs from "fs"
 
 // ===
-global.botNumber = "" //Ejemplo: 5491162424280
-
-// ===
-
 global.owner = ["5491124918653", "5491162424280"]
 global.suittag = [] 
 global.prems = ["5491124918653"]
