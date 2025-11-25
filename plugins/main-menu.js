@@ -37,7 +37,7 @@ const defaultMenu = {
 
   header: `
 ╭── ⭒ *%category*
-│ Comandos disponibles:
+│ 
 `.trim(),
 
   body: '│ ➤ %cmd %islimit %isPremium',
