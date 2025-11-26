@@ -1,5 +1,8 @@
 import { search, download} from 'aptoide-scraper';
 
+const rwait = '⏳';
+const done = '✅';
+
 const handler = async (m, { conn, usedPrefix, text}) => {
   if (!text) {
     return conn.reply(m.chat, '🍃 Por favor, ingrese el nombre de la APK que desea descargar.', m);
@@ -48,7 +51,7 @@ const handler = async (m, { conn, usedPrefix, text}) => {
 };
 
 handler.tags = ['downloader'];
-handler.help = ['apkmod'];
+handler.help = ['apk', 'modapk', 'aptoide'];
 handler.command = ['apk', 'modapk', 'aptoide'];
 handler.group = true;
 handler.register = true;
