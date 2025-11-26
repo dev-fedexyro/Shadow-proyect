@@ -37,8 +37,9 @@ let handler = async (m, { conn, command, args, text }) => {
     if (!text) return conn.reply(m.chat, `\`\`\`ⓘ Por favor, ingresa el ID del canal. \n\nEjemplo: ${command} 1234567890@newsletter\`\`\``, m)
     
     const channelId = text.trim();
-    if (!channelId.includes('@')) {
-         return conn.reply(m.chat, `\`\`\`❌ Error: El formato del ID del canal debe ser completo. \n\nEjemplo: 1234567890@newsletter\`\`\``, m)
+    
+    if (!channelId.endsWith('@newsletter')) {
+         return conn.reply(m.chat, `\`\`\`❌ Error: El formato del ID del canal debe ser completo. \n\nDebe terminar en @newsletter. Ejemplo: ${command} 1234567890@newsletter\`\`\``, m)
     }
 
     try {
@@ -67,7 +68,7 @@ let handler = async (m, { conn, command, args, text }) => {
 
     } catch (e) {
         await reportError(e);
-        await conn.reply(m.chat, '*❌ El ID proporcionado no es válido o no existe. Asegúrate de usar el ID completo (ej: 123456@newsletter).*', m);
+        await conn.reply(m.chat, '*❌ Error de conexión o ID no válido. Asegúrate de que el ID sea correcto y completo (ej: 123456@newsletter).*', m);
     }
 }
 
