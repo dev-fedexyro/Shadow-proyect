@@ -1,40 +1,32 @@
-import { WAMessageStubType } from '@whiskeysockets/baileys'
+let handler = async (event, { conn}) => {
+  try {
+    const chatSettings = global.db.data.chats[event.id];
+    if (!chatSettings ||!chatSettings.welcome) return;
 
-let handler = m => m
+    for (const participant of event.participants) {
+      const username = '@' + participant.split('@')[0];
+      let messageText = '';
 
-handler.before = async function (m, { conn }) {
-    try {
-        if (!m.messageStubType || !m.isGroup) return !0
-        if (!global.db.data.chats[m.chat] || !global.db.data.chats[m.chat].welcome) return !0
-
-        let userId = m.messageStubParameters[0]
-        
-        if (!userId) return !0
-        
-        const username = `@${userId.split('@')[0]}`
-        const stubType = m.messageStubType
-        
-        const isAdd = stubType === WAMessageStubType.GROUP_PARTICIPANT_ADD
-        const isRemove = stubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE || stubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE
-
-        let textMessage = ''
-        
-        if (isAdd) {
-            textMessage = `Bienvenido al grupo: ${username}`
-        } else if (isRemove) {
-            textMessage = `Adiós del grupo: ${username}`
-        }
-
-        if (textMessage) {
-            await conn.sendMessage(m.chat, {
-                text: textMessage,
-                contextInfo: { mentionedJid: [userId] }
-            })
-        }
-
-    } catch (e) {
-        // console.error("Error en el evento de grupo:", e)
-    }
+      switch (event.action) {
+        case 'add':
+          messageText = `👋 ¡Bienvenido al grupo, ${username}!`;
+          break;
+        case 'remove':
+          messageText = `👋 ${username} ha salido del grupo. ¡Hasta pronto!`;
+          break;
+        default:
+          continue;
 }
 
-export default handler
+      await conn.sendMessage(event.id, {
+        text: messageText,
+        mentions: [participant]
+});
+}
+} catch (error) {
+    console.error('Error en welcome.js:', error);
+}
+};
+
+handler.event = 'group-participants.update';
+export default handler;
