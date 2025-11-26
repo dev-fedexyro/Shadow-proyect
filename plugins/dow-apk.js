@@ -4,7 +4,7 @@ const MAX_APK_SIZE_MB = 200
 
 const handler = async (m, { conn, text}) => {
   if (!text) {
-    return conn.reply(m.chat, '🌱 Por favor, ingrese el nombre de la APK que desea buscar.', m)
+    return conn.reply(m.chat, '\`\`\`🌱 Por favor, ingrese el nombre de la APK que desea buscar.\`\`\`', m)
 }
 
   try {
@@ -50,7 +50,7 @@ const handler = async (m, { conn, text}) => {
         document: { url: dllink},
         mimetype: 'application/vnd.android.package-archive',
         fileName: `${name}.apk`,
-        caption: `✅ **${name}** APK lista para instalar.`
+        caption: `✅ \`\`\`${name}\`\`\` APK lista para instalar.`
       },
       { quoted: m}
     )
