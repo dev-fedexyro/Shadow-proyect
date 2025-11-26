@@ -12,7 +12,7 @@ let handler = async (m, { conn, command, args, text }) => {
     
     let msm = 'Ocurrió un error.'
     let icons = 'https://files.catbox.moe/p0fk5h.jpg'
-    let md = 'https://github.com/dev-fedexyzz'
+    let md = 'https://github.com/dev-fedexyro'
 
     let fkontak = { 
         "key": { 
