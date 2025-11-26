@@ -1,6 +1,6 @@
-/* Codigo creado por dev-fedexyz 
+/* Codigo creado por dev-fedexyz X fede Uchiha 
 * github: https://github.com/dev-fedexyro
-* no sabes créditos puta*/
+* no saques créditos puta*/
 
 let handler = async (m, { conn, command, args, text }) => {
     const isCommand1 = /^(inspect|inspeccionar)\b$/i.test(command)
