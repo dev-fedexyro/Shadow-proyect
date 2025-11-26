@@ -3,9 +3,10 @@
 * no saques créditos puta*/
 
 let handler = async (m, { conn, command, args, text }) => {
-    const isCommand1 = /^(inspect|inspeccionar)\b$/i.test(command)
+    const isGetGroupIdCommand = /^(idgp|gp)\b$/i.test(command);
+    const isInspectCommand = /^(inspect|inspeccionar)\b$/i.test(command);
     
-    if (!isCommand1) return
+    if (!isInspectCommand && !isGetGroupIdCommand) return
 
     const channelUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:channel\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
     
@@ -48,90 +49,116 @@ let handler = async (m, { conn, command, args, text }) => {
         return `${idHeader}\n*ID:* ${id}`;
     }
 
-    switch (true) {     
-        case isCommand1:
-            let inviteCode
-            
-            if (!text) return conn.reply(m.chat, '\`\`\`ⓘ Ingrese un enlace de grupo/comunidad o canal.\`\`\`', m)
-            
-            let info
-            try {
-                let res = text ? null : await conn.groupMetadata(m.chat)
-                if (res) {
-                    info = await MetadataGroupInfo(res)
-                    console.log('Método de metadatos de grupo/comunidad')
-                } else {
-                    const inviteUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:invite\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
-                    let inviteInfo
-                    if (inviteUrl) {
-                        try {
-                            inviteInfo = await conn.groupGetInviteInfo(inviteUrl)
-                            info = await inviteGroupInfo(inviteInfo)
-                            console.log(`Método de enlace de grupo/comunidad.`)    
-                        } catch (e) {
-                             
-                        }
-                    }
-                }
-            } catch (e) {
-                 
-            }
+    if (isGetGroupIdCommand) {
+        if (!m.isGroup) {
+            return conn.reply(m.chat, '*ⓘ Este comando solo funciona en grupos.*', m);
+        }
 
-            if (info) {
-                
-                await conn.sendMessage(m.chat, { text: info, contextInfo: {
-                    mentionedJid: conn.parseMention(info),
-                    externalAdReply: {
-                        title: `Shadow - Inspector de IDS`,
-                        body: `¡Super Inspectador!`,
-                        thumbnailUrl: pp ? pp : thumb,
-                        sourceUrl: args[0] ? args[0] : inviteCode ? `https://chat.whatsapp.com/${inviteCode}` : md,
-                        mediaType: 1,
-                        showAdAttribution: false,
-                        renderLargerThumbnail: false
-                    }
-                }}, { quoted: fkontak })
+        try {
+            const groupMetadata = await conn.groupMetadata(m.chat);
+            const info = await MetadataGroupInfo(groupMetadata);
+            
+            await conn.sendMessage(m.chat, { text: info, contextInfo: {
+                mentionedJid: conn.parseMention(info),
+                externalAdReply: {
+                    title: `Shadow - ID del Grupo`,
+                    body: `¡ID Obtenido!`,
+                    thumbnailUrl: pp ? pp : thumb,
+                    sourceUrl: md,
+                    mediaType: 1,
+                    showAdAttribution: false,
+                    renderLargerThumbnail: false
+                }
+            }}, { quoted: fkontak });
+
+        } catch (e) {
+            reportError(e);
+        }
+        return;
+    }
+
+    if (isInspectCommand) {     
+        let inviteCode
+        
+        if (!text) return conn.reply(m.chat, '\`\`\`ⓘ Ingrese un enlace de grupo/comunidad o canal.\`\`\`', m)
+        
+        let info
+        try {
+            let res = text ? null : await conn.groupMetadata(m.chat)
+            if (res) {
+                info = await MetadataGroupInfo(res)
+                console.log('Método de metadatos de grupo/comunidad')
             } else {
-                
-                let newsletterInfo
-                if (!channelUrl) return conn.reply(m.chat, `*Verifique que sea un enlace válido de grupo, comunidad o canal de WhatsApp.*`, m)
-                
-                if (channelUrl) {
+                const inviteUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:invite\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
+                let inviteInfo
+                if (inviteUrl) {
                     try {
-                        newsletterInfo = await conn.newsletterMetadata("invite", channelUrl).catch(() => null)
-                        if (!newsletterInfo) return conn.reply(m.chat, `No se encontró información del canal. Verifique que el enlace sea correcto.`, m)       
-                        
-                        
-                        const channelID = newsletterInfo.id || 'ID no encontrado'
-                        
-                        const caption = `*ID DEL CANAL*\n*ID:* ${channelID}`
-                        
-                        
-                        if (channelUrl && newsletterInfo) {
-                            await conn.sendMessage(m.chat, { text: caption, contextInfo: {
-                                mentionedJid: conn.parseMention(caption),
-                                externalAdReply: {
-                                    title: `Inspector de Canales`,
-                                    body: `¡Super Inspectador!`,
-                                    thumbnailUrl: pp,
-                                    sourceUrl: args[0] || md,
-                                    mediaType: 1,
-                                    showAdAttribution: false,
-                                    renderLargerThumbnail: false
-                                }
-                            }}, { quoted: fkontak })
-                        }
+                        inviteInfo = await conn.groupGetInviteInfo(inviteUrl)
+                        info = await inviteGroupInfo(inviteInfo)
+                        console.log(`Método de enlace de grupo/comunidad.`)    
                     } catch (e) {
-                        reportError(e)
+                         
                     }
                 }
             }
-            break
+        } catch (e) {
+             
+        }
+
+        if (info) {
+            
+            await conn.sendMessage(m.chat, { text: info, contextInfo: {
+                mentionedJid: conn.parseMention(info),
+                externalAdReply: {
+                    title: `Shadow - Inspector de IDS`,
+                    body: `¡Super Inspectador!`,
+                    thumbnailUrl: pp ? pp : thumb,
+                    sourceUrl: args[0] ? args[0] : inviteCode ? `https://chat.whatsapp.com/${inviteCode}` : md,
+                    mediaType: 1,
+                    showAdAttribution: false,
+                    renderLargerThumbnail: false
+                }
+            }}, { quoted: fkontak })
+        } else {
+            
+            let newsletterInfo
+            if (!channelUrl) return conn.reply(m.chat, `*Verifique que sea un enlace válido de grupo, comunidad o canal de WhatsApp.*`, m)
+            
+            if (channelUrl) {
+                try {
+                    newsletterInfo = await conn.newsletterMetadata("invite", channelUrl).catch(() => null)
+                    if (!newsletterInfo) return conn.reply(m.chat, `No se encontró información del canal. Verifique que el enlace sea correcto.`, m)       
+                    
+                    
+                    const channelID = newsletterInfo.id || 'ID no encontrado'
+                    
+                    const caption = `*ID DEL CANAL*\n*ID:* ${channelID}`
+                    
+                    
+                    if (channelUrl && newsletterInfo) {
+                        await conn.sendMessage(m.chat, { text: caption, contextInfo: {
+                            mentionedJid: conn.parseMention(caption),
+                            externalAdReply: {
+                                title: `Inspector de Canales`,
+                                body: `¡Super Inspectador!`,
+                                thumbnailUrl: pp,
+                                sourceUrl: args[0] || md,
+                                mediaType: 1,
+                                showAdAttribution: false,
+                                renderLargerThumbnail: false
+                            }
+                        }}, { quoted: fkontak })
+                    }
+                } catch (e) {
+                    reportError(e)
+                }
+            }
+        }
     }
 }
 
 handler.tags = ['herramientas']
-handler.help = ['inspect <enlace>', 'inspeccionar <enlace>']
-handler.command = ['inspect', 'inspeccionar']
+handler.help = ['inspect <enlace>', 'inspeccionar <enlace>', 'idgp', 'gp']
+handler.command = ['inspect', 'inspeccionar', 'idgp', 'gp']
 
 export default handler
