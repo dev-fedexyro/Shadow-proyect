@@ -23,7 +23,7 @@ let tags = {
 
 const defaultMenu = {
   before: `
-────────────── ⭒ ──────────────
+───────── ⭒ ─────────
 
 Hola %name, soy *Shadow-Bot*.
 %greeting, estoy aquí para ayudarte.
@@ -35,7 +35,7 @@ Hola %name, soy *Shadow-Bot*.
 
 %readmore
 
-*LISTA DE COMANDOS DISPONIBLES*
+*▪︎──LISTA DE COMANDOS──▪︎*
 `.trim(),
   
   header: `
