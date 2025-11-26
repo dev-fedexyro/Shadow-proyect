@@ -4,7 +4,7 @@ const handler = async (m, { conn, command, args, usedPrefix }) => {
     let url = args[0]
     
     if (!url) {
-        return conn.reply(m.chat, `✨ Por favor, ingrese el link de una página web para tomarle captura.*`, m)
+        return conn.reply(m.chat, `*✨ Por favor, ingrese el link de una página web para tomarle captura.*`, m)
     }
 
     if (!url.includes('.') || url.length < 5) {
