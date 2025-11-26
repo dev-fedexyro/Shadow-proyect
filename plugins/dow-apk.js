@@ -18,7 +18,7 @@ const handler = async (m, { conn, text}) => {
 
     const { name, package: pkg, lastup, size, icon, dllink} = await download(results[0].id)
 
-    const appInfo = `*APTOIDE - DESCARGAS *\n\n` +
+    const appInfo = `*APTOIDE - DESCARGAS*\n\n` +
                     `🌱 Nombre: ${name}\n` +
                     `📚 Paquete: ${pkg}\n` +
                     `📩 Última actualización: ${lastup}\n` +
