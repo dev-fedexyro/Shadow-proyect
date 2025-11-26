@@ -5,18 +5,11 @@ const handler = async (m, { conn, usedPrefix}) => {
   const q = m.quoted || m
   const mime = (q.msg || q).mimetype || q.mediaType || ''
 
-  if (!mime) {
-    return conn.reply(m.chat, '🌱 Por favor, responde a una imagen con el comando.', m)
-}
-
-  if (!/image\/(jpe?g|png)/.test(mime)) {
-    return conn.reply(m.chat, `🌵 Formato no compatible (${mime}). Usa una imagen JPG o PNG.`, m)
-}
+  if (!mime) return conn.reply(m.chat, '🌱 Por favor, responde a una imagen con el comando.', m)
+  if (!/image\/(jpe?g|png)/.test(mime)) return conn.reply(m.chat, `🌵 Formato no compatible (${mime}). Usa una imagen JPG o PNG.`, m)
 
   const buffer = await q.download()
-  if (!buffer || buffer.length < 1000) {
-    return conn.reply(m.chat, '🌱 Imagen no válida o demasiado pequeña.', m)
-}
+  if (!buffer || buffer.length < 1000) return conn.reply(m.chat, '🌱 Imagen no válida o demasiado pequeña.', m)
 
   await m.react('🌱')
 
@@ -50,7 +43,7 @@ const handler = async (m, { conn, usedPrefix}) => {
 
     await conn.reply(
       m.chat,
-      `🌱 Error, No se pudo mejorar la imagen.\n\n${fallback}`,
+      `🌱 Error, no se pudo mejorar la imagen.\n\n${fallback}`,
       m
 )
 }
@@ -94,8 +87,12 @@ async function upscaleVreden(url) {
   const res = await fetch(`${global.APIs.vreden.url}/api/artificial/hdr?url=${encodeURIComponent(url)}&pixel=4`)
   if (!res.ok) throw new Error(`Vreden falló con código ${res.status}`)
   const json = await res.json()
+
   const finalUrl = json?.resultado?.datos?.descargaUrls?.[0]
-  if (!finalUrl ||!finalUrl.startsWith('https://')) throw new Error('Respuesta inválida de Vreden')
+  if (!finalUrl || typeof finalUrl!== 'string' ||!finalUrl.startsWith('https://')) {
+    throw new Error('Respuesta inválida de Vreden: no se encontró una URL válida.')
+}
+
   return finalUrl
 }
 upscaleVreden.engineName = 'Vreden'
