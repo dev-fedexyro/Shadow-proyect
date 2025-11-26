@@ -19,10 +19,10 @@ let handler = async (m, { conn, usedPrefix, command, args, isAdmin }) => {
 
     if (action === 'off') {
         if (chat.isBanned) {
-            return conn.reply(m.chat, `❌ *${botName}* ya estaba *desactivado* para este grupo.`, m);
+            return conn.reply(m.chat, `🌵 *${botName}* ya estaba *desactivado* para este grupo.`, m);
         }
         chat.isBanned = true;
-        return conn.reply(m.chat, `❌ Has *desactivado* a ${botName} en este grupo.`, m);
+        return conn.reply(m.chat, `🌱 Has *desactivado* a ${botName} en este grupo.`, m);
         
     } else if (action === 'on') {
         if (!chat.isBanned) {
@@ -36,7 +36,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isAdmin }) => {
 }
 
 handler.help = ['bot'];
-handler.tags = ['grupo'];
+handler.tags = ['group'];
 handler.command = ['bot'];
 handler.admin = true;
 
