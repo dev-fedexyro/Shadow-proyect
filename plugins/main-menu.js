@@ -1,6 +1,6 @@
-import { promises as fs} from 'fs'
-import { join} from 'path'
-import { xpRange} from '../lib/levelling.js'
+import { promises as fs } from 'fs'
+import { join } from 'path'
+import { xpRange } from '../lib/levelling.js'
 
 let tags = {
   info: 'ɪɴғᴏʀᴍᴀᴄɪᴏ́ɴ',
@@ -35,35 +35,32 @@ const defaultMenu = {
 
 \`\`\`─ׄ─ׅ─ׄ─⭒ LISTA DE COMANDOS ⭒─ׄ─ׅ─ׄ─\`\`\`
 `.trim(),
-
   header: `
 ╭── ⭒ *%category* `.trim(),
-
   body: '│ ➩ %cmd %islimit %isPremium',
   footer: '╰──────────\n',
   after: ''
 }
 
-let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
+let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
-    let _package = JSON.parse(await fs.readFile(join(__dirname, '../package.json')).catch(() => '{}')) || {}
-    let { exp, limit, level} = global.db.data.users[m.sender]
-    let { min, xp, max} = xpRange(level, global.multiplier)
-    let name = await conn.getName(m.sender)
-    let _uptime = process.uptime() * 1000
-    let uptime = clockString(_uptime)
-    let totalreg = Object.keys(global.db.data.users).length
-    let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered).length
+    const { exp, limit, level } = global.db.data.users[m.sender]
+    const { min, xp, max } = xpRange(level, global.multiplier)
+    const name = await conn.getName(m.sender)
+    const _uptime = process.uptime() * 1000
+    const uptime = clockString(_uptime)
+    const totalreg = Object.keys(global.db.data.users).length
+    const rtotalreg = Object.values(global.db.data.users).filter(user => user.registered).length
 
     let help = Object.values(global.plugins)
-      .filter(plugin =>!plugin.disabled)
+      .filter(plugin => !plugin.disabled)
       .map(plugin => ({
-        help: Array.isArray(plugin.help)? plugin.help: [plugin.help],
-        tags: Array.isArray(plugin.tags)? plugin.tags: [plugin.tags],
+        help: Array.isArray(plugin.help) ? plugin.help : [plugin.help],
+        tags: Array.isArray(plugin.tags) ? plugin.tags : [plugin.tags],
         prefix: 'customPrefix' in plugin,
         limit: plugin.limit,
         premium: plugin.premium,
-        enabled:!plugin.disabled
+        enabled: !plugin.disabled
       }))
 
     for (let plugin of help) {
@@ -74,7 +71,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       }
     }
 
-    let menuText = [
+    const menuText = [
       defaultMenu.before,
       ...Object.keys(tags)
         .filter(tag => help.some(menu => menu.tags.includes(tag) && menu.help))
@@ -82,21 +79,18 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
           let section = help.filter(menu => menu.tags.includes(tag) && menu.help)
             .map(menu => menu.help.map(cmd =>
               defaultMenu.body
-                .replace(/%cmd/g, menu.prefix? cmd: _p + cmd)
-                .replace(/%islimit/g, menu.limit? '◜⭐◞': '')
-                .replace(/%isPremium/g, menu.premium? '◜🪪◞': '')
+                .replace(/%cmd/g, menu.prefix ? cmd : _p + cmd)
+                .replace(/%islimit/g, menu.limit ? '◜⭐◞' : '')
+                .replace(/%isPremium/g, menu.premium ? '◜🪪◞' : '')
             ).join('\n')).join('\n')
 
-          if (section.trim()) {
-            return defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer
-          }
-          return ''
+          return section.trim() ? defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer : ''
         }),
       defaultMenu.after
     ].join('\n')
 
-    let greeting = getGreeting()
-    let replace = {
+    const greeting = getGreeting()
+    const replace = {
       '%': '%',
       p: _p,
       uptime,
@@ -116,9 +110,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       readmore: String.fromCharCode(8206).repeat(4001)
     }
 
-    let text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
+    const text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
 
-    let buttonMessage = {
+    const buttonMessage = {
       video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'},
       gifPlayback: true,
       caption: text.trim(),
@@ -141,7 +135,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
     }
 
     await m.react('🌑')
-    await conn.sendMessage(m.chat, buttonMessage, { quoted: m})
+    await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
 
   } catch (e) {
     await m.react('✖️')
