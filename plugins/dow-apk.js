@@ -68,7 +68,7 @@ const handler = async (m, { conn, text}) => {
   }
 }
 
-handler.tags = ['descargas']
+handler.tags = ['downloader']
 handler.help = ['apk', 'modapk', 'aptoide']
 handler.command = ['apk', 'modapk', 'aptoide']
 handler.group = true
