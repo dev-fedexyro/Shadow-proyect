@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { WAMessageStubType} from '@whiskeysockets/baileys';
 
-const newsletterJid = '120363405641626756@newsletter';
-const newsletterName = '『 ⏤͟͟͞͞☆ 𝑵𝒂𝒈𝒊𝑩𝒐𝒕-𝑰𝑨 | 𝑪𝒉𝒂𝒏𝒏𝒆𝒍 𝑶𝒇𝒇𝒊𝒄𝒊𝒂𝒍 ❀ 』';
-const packname = '🄽🄰🄶🄸🄱🄾🅃‐🄼🄳';
+const newsletterJid = '120363420231014623@newsletter';
+const newsletterName = 'ѕнα∂σω • σƒƒι¢ιαℓ 👑';
+const packname = 'Shadow Ultra MD';
 
 async function generarBienvenida({ conn, userId, groupMetadata, chat}) {
   const username = `@${userId.split('@')[0]}`;
@@ -115,11 +115,9 @@ export { generarBienvenida, generarDespedida};
 export default handler;
 
 const iconos = [
-  'https://kirito.my/media/images/33437668_k.jpg',
-  'https://kirito.my/media/images/31336923_k.jpg',
-  'https://kirito.my/media/images/33437668_k.jpg',
-  'https://kirito.my/media/images/95668416_k.jpg',
-  'https://kirito.my/media/images/31336923_k.jpg'
+  'https://files.catbox.moe/12zb63.jpg',
+  'https://files.catbox.moe/12zb63.jpg',
+  'https://files.catbox.moe/12zb63.jpg'
 ];
 
 const defaultIcono = 'https://files.catbox.moe/60z2ix.jpg';
