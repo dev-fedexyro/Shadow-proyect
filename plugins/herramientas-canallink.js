@@ -46,7 +46,7 @@ let handler = async (m, { conn, command, args, text }) => {
         const inviteInfo = await conn.newsletterGetInvite(channelId);
         
         if (!inviteInfo || !inviteInfo.url) {
-            return conn.reply(m.chat, '*❌ No se pudo obtener el enlace de invitación para ese ID de canal. Verifique que el ID sea correcto.*', m);
+            return conn.reply(m.chat, '*❌ No se pudo obtener el enlace de invitación. El servidor no devolvió un enlace válido, incluso si el ID parece correcto.*', m);
         }
 
         const channelLink = inviteInfo.url;
@@ -67,8 +67,14 @@ let handler = async (m, { conn, command, args, text }) => {
         }}, { quoted: fkontak });
 
     } catch (e) {
+        if (e.output && e.output.statusCode === 404) {
+             return conn.reply(m.chat, '*❌ Error 404: El canal con ese ID no fue encontrado. El ID es incorrecto o el canal fue eliminado.*', m);
+        } else if (e.message && e.message.includes('not a newsletter')) {
+             return conn.reply(m.chat, '*❌ Error: El ID proporcionado no corresponde a un canal (newsletter) válido.*', m);
+        }
+        
         await reportError(e);
-        await conn.reply(m.chat, '*❌ Error de conexión o ID no válido. Asegúrate de que el ID sea correcto y completo (ej: 123456@newsletter).*', m);
+        await conn.reply(m.chat, `*❌ Fallo en la API.* Intenta con otro ID para confirmar el error. El ID: *${channelId}* podría ser inválido.`, m);
     }
 }
 
