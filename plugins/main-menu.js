@@ -37,7 +37,8 @@ const defaultMenu = {
 `.trim(),
 
   header: `
-╭── ⭒ *%category* `.trim(),
+╭── ⭒ *%category* 
+`.trim(),
 
   body: '│ ➩ %cmd %islimit %isPremium',
   footer: '╰──────────\n',
@@ -55,8 +56,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
     let totalreg = Object.keys(global.db.data.users).length
     let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered).length
 
-    let channel = 'https://whatsapp.com/channel/0029VbBG4i2GE56rSgXsqw2W'
-
     let help = Object.values(global.plugins).filter(plugin =>!plugin.disabled).map(plugin => ({
       help: Array.isArray(plugin.help)? plugin.help: [plugin.help],
       tags: Array.isArray(plugin.tags)? plugin.tags: [plugin.tags],
@@ -70,28 +69,28 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       if (plugin && plugin.tags) {
         for (let tag of plugin.tags) {
           if (!(tag in tags)) tags[tag] = tag
-}
-}
-}
+        }
+      }
+    }
 
     let menuText = [
       defaultMenu.before,
 ...Object.keys(tags)
-.filter(tag => help.some(menu => menu.tags.includes(tag) && menu.help))
-.map(tag => {
+        .filter(tag => help.some(menu => menu.tags.includes(tag) && menu.help))
+        .map(tag => {
           let section = help.filter(menu => menu.tags.includes(tag) && menu.help)
-.map(menu => menu.help.map(cmd =>
+            .map(menu => menu.help.map(cmd =>
               defaultMenu.body
-.replace(/%cmd/g, menu.prefix? cmd: _p + cmd)
-.replace(/%islimit/g, menu.limit? '◜⭐◞': '')
-.replace(/%isPremium/g, menu.premium? '◜🪪◞': '')
-).join('\n')).join('\n')
+                .replace(/%cmd/g, menu.prefix? cmd: _p + cmd)
+                .replace(/%islimit/g, menu.limit? '◜⭐◞': '')
+                .replace(/%isPremium/g, menu.premium? '◜🪪◞': '')
+            ).join('\n')).join('\n')
 
           if (section.trim()) {
             return defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer
-}
+          }
           return ''
-}),
+        }),
       defaultMenu.after
     ].join('\n')
 
@@ -122,25 +121,13 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
       video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'},
       gifPlayback: true,
       caption: text.trim(),
-      footer: '*_🌵 Usa los botones de abajo para interactuar._*',
       mentions: [m.sender],
-      templateButtons: [
-{
-  index: 1,
-          urlButton: {
-            displayText: '🌵 Canal',
-            url: channel
-}
-},
-        {
-          index: 2,
-          quickReplyButton: {
-            displayText: 'ꜱᴇʀ ꜱᴜʙ-ʙᴏᴛ',
-            id: '.code'
-}
-}
-      ]
-}
+      footer: '*_🌵 usa el botón de abajo para ser Sub-Bot._*',
+      buttons: [
+        { buttonId: '.code', buttonText: { displayText: 'ꜱᴇʀ ꜱᴜʙ-ʙᴏᴛ'}, type: 1}
+      ],
+      headerType: 4
+    }
 
     await m.react('🌑')
     await conn.sendMessage(m.chat, buttonMessage, { quoted: m})
@@ -155,7 +142,6 @@ handler.help = ['menu']
 handler.tags = ['main']
 handler.command = ['menu', 'help', 'menú']
 handler.register = true
-
 export default handler
 
 function clockString(ms) {
@@ -172,4 +158,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-}
+                         }
