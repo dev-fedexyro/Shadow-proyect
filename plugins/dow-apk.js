@@ -1,6 +1,6 @@
 import { search, download} from 'aptoide-scraper'
 
-const MAX_APK_SIZE_MB = 100
+const MAX_APK_SIZE_MB = 200
 
 const handler = async (m, { conn, text}) => {
   if (!text) {
@@ -39,7 +39,7 @@ const handler = async (m, { conn, text}) => {
       await m.react('⚠️')
       return conn.reply(
         m.chat,
-        `⚠️ El archivo (${size}) es demasiado pesado. Límite: ${MAX_APK_SIZE_MB} MB.`,
+     `⚠️ El archivo (${size}) es demasiado pesado. Límite: ${MAX_APK_SIZE_MB} MB.`, 
         m
       )
     }
