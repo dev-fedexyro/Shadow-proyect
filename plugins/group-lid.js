@@ -1,9 +1,11 @@
 let handler = async (m, { conn, command, args, text }) => {
     let targetId;
     let title = 'Obtener JID/LID';
+    let targetLID = 'N/D';
 
     if (m.quoted) {
         targetId = m.quoted.sender;
+        targetLID = m.quoted.participant.lid || 'N/D';
     } 
     else if (text) {
         const mentionMatch = text.match(/@(\d+)/);
@@ -24,9 +26,15 @@ let handler = async (m, { conn, command, args, text }) => {
     }
 
     let jidResult = targetId;
-    
     let numberClean = jidResult.split('@')[0];
     
+    if (targetLID === 'N/D' && jidResult === m.sender) {
+        const lidMatch = m.sender.match(/(\d+)@lid/);
+        if (lidMatch) {
+             targetLID = lidMatch[1] + '@lid';
+        }
+    }
+
     let fkontak = { 
         "key": { 
             "participants":"0@s.whatsapp.net", 
@@ -46,12 +54,17 @@ let handler = async (m, { conn, command, args, text }) => {
     let md = 'https://github.com/dev-fedexyzz';
 
     const caption = `
-*✅ Información de Usuario (JID/LID)*
+👤 *DATOS DEL USUARIO* 🕵️
+═════════════════
+💚 *Número de WhatsApp:*
+\`+${numberClean}\`
 
-*Número de WhatsApp:* \`+${numberClean}\`
-
-*JID (Linked ID) Completo:*
+🔑 *JID (ID de WhatsApp):*
 \`${jidResult}\`
+
+🔗 *LID (ID Vinculado/Server ID):*
+\`${targetLID}\`
+═════════════════
 `;
     
     let pp;
