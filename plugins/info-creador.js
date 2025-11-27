@@ -6,6 +6,7 @@ ORG:𝐅𝐞𝐝𝐞 𝐔𝐜𝐡𝐢𝐡𝐚
 TITLE:Epictetus, Enchiridion — Chapter 1 (verse 1)
 TEL;type=CELL;waid=5491124918653:+5491124918653
 ADR;type=WORK:;;2-chōme-7-5 Fuchūchō;Izumi;Osaka;594-0071;Japan
+X-WA-BIZ-NAME:Ｓｈａｄｏｗ - Ｂｏｔ
 X-WA-BIZ-DESCRIPTION:ꜱʜᴀᴅᴏᴡ, ʙᴏᴛ ᴄʀᴇᴀᴅᴏ ꜱᴏʟᴏ ᴘᴏʀ ᴅɪᴠᴇʀꜱɪóɴ ᴜᴡᴜ ♡
 X-WA-BIZ-HOURS:Mo-Su 00:00-23:59
 END:VCARD`;
