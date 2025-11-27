@@ -31,9 +31,7 @@ Hola %name, soy *Shadow-Bot*.
 🌵 Modo: *Privado*
 📚 Motor: *Baileys MD*
 ⏱ Tiempo activo: *%uptime*
-👥 Usuarios registrados: *%totalreg*
-
-%readmore
+👥 Usuarios registrados: *%totalreg*%readmore
 
 *▪︎──LISTA DE COMANDOS──▪︎*
 `.trim(),
