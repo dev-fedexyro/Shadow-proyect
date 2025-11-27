@@ -9,7 +9,7 @@ TEL;type=CELL;waid=5491124918653:+5491124918653
 ADR;type=WORK:;;2-chōme-7-5 Fuchūchō;Izumi;Osaka;594-0071;Japan
 URL;type=WORK:https://www.instagram.com/dev-fedexyz13
 X-WA-BIZ-NAME:Ｓｈａｄｏｗ - Ｂｏｔ
-X-WA-BIZ-DESCRIPTION:ꜱʜᴀᴅᴏᴡ, ʙᴏᴛ ᴄʀᴇᴀᴅᴏʀ ꜱᴏʟᴏ ᴘᴏʀ ᴅɪᴠᴇʀꜱɪóɴ ᴜᴡᴜ ♡
+X-WA-BIZ-DESCRIPTION:ꜱʜᴀᴅᴏᴡ, ʙᴏᴛ ᴄʀᴇᴀᴅᴏ ꜱᴏʟᴏ ᴘᴏʀ ᴅɪᴠᴇʀꜱɪóɴ ᴜᴡᴜ ♡
 X-WA-BIZ-HOURS:Mo-Su 00:00-23:59
 END:VCARD`;
 
