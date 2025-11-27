@@ -36,7 +36,7 @@ END:VCARD`;
             },
             contextInfo: {
                 externalAdReply: {
-                    title: "© 2024–2025 Shadow Project",
+                    title: "𝘊𝘳𝘦𝘢𝘥𝘰𝘳 𝘥𝘦𝘭 𝘉𝘰𝘵 𝘹 𝘧𝘦𝘥𝘦 𝘜𝘤𝘩𝘪𝘩𝘢",
                     body: "Contacta con el CEO del bot.",
                     thumbnailUrl: "https://files.catbox.moe/2xlrwj.jpg",
                     mediaType: 1,
