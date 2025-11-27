@@ -1,5 +1,4 @@
 let handler = async (m, { conn, usedPrefix, command }) => {
-
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:𝐅𝐞𝐝𝐞 𝐔𝐜𝐡𝐢𝐡𝐚
@@ -7,8 +6,8 @@ ORG:𝐅𝐞𝐝𝐞 𝐔𝐜𝐡𝐢𝐡𝐚
 TITLE:Epictetus, Enchiridion — Chapter 1 (verse 1)
 TEL;type=CELL;waid=5491124918653:+5491124918653
 ADR;type=WORK:;;2-chōme-7-5 Fuchūchō;Izumi;Osaka;594-0071;Japan
-X-WA-BIZ-NAME:Ｓｈａｄｏｗ - Ｂｏｔ
-X-WA-BIZ-DESCRIPTION:ꜱʜᴀᴅᴏᴡ, ʙᴏᴛ ᴄʀᴇᴀᴅᴏ ꜱᴏʟᴏ ᴘᴏʀ ᴅɪᴠᴇʀꜱióɴ ᴜᴡᴜ ♡
+X-WA-BIZ-NAME:Ｓ𝐡𝐚𝐝𝐨𝐰 - 𝐁𝐨𝐭
+X-WA-BIZ-DESCRIPTION:ꜱ𝐡𝐚𝐝𝐨𝐰, 𝐛𝐨𝐭 𝐜𝐫𝐞𝐚𝐝𝐨 𝐬𝐨𝐥𝐨 𝐩𝐨𝐫 𝐝𝐢𝐯𝐞𝐫𝐬𝐢ó𝐧 𝐮𝐰𝐮 ♡
 X-WA-BIZ-HOURS:Mo-Su 00:00-23:59
 END:VCARD`;
 
