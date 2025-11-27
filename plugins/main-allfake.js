@@ -47,7 +47,7 @@ handler.all = async function (m) {
 🌱 Usuario: ${nombre}
 📚 Fecha: ${fecha}
 ⏱ Hora: ${hora}
-⊱Made by fede Uchiha ✧
+⊱Made by fede Uchiha ♡
 `
 
   global.fkontak = {
