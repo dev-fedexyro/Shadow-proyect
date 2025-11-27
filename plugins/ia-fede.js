@@ -46,8 +46,8 @@ const handler = async (message, { conn, text}) => {
 }
 };
 
-handler.help = ['shadow'];
+handler.help = ['fede'];
 handler.tags = ['ai'];
-handler.command = ['shadow'];
+handler.command = ['fede'];
 
 export default handler;
