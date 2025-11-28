@@ -54,8 +54,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
     let uptime = clockString(_uptime)
     let totalreg = Object.keys(global.db.data.users).length
     let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered).length
-    
-    const thumbResized = null 
 
     let help = Object.values(global.plugins).filter(plugin =>!plugin.disabled).map(plugin => ({
       help: Array.isArray(plugin.help)? plugin.help: [plugin.help],
@@ -117,61 +115,68 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
 }
 
     let text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
-    
-    const menu = text.trim() 
+        
+    let menu = `
+${text.trim()}
 
-    const nativeFlowPayload = {
-      header: {
-        documentMessage: {
-          url: 'https://mmg.whatsapp.net/v/t62.7119-24/539012045_745537058346694_1512031191239726227_n.enc',
-          mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          fileSha256: Buffer.from('fa09afbc207a724252bae1b764ecc7b13060440ba47a3bf59e77f01924924bfe', 'hex'),
-          fileLength: { low: -727379969, high: 232, unsigned: true },
-          pageCount: 0,
-          mediaKey: Buffer.from('3163ba7c8db6dd363c4f48bda2735cc0d0413e57567f0a758f514f282889173c', 'hex'),
-          fileName: 'ɴᴀɢɪ ʙᴏᴛ ᴠ3',
-          fileEncSha256: Buffer.from('652f2ff6d8a8dae9f5c9654e386de5c01c623fe98d81a28f63dfb0979a44a22f', 'hex'),
-          directPath: '/v/t62.7119-24/539012045_745537058346694_1512031191239726227_n.enc',
-          mediaKeyTimestamp: { low: 1756370084, high: 0, unsigned: false },
-          jpegThumbnail: thumbResized || null,
-          contextInfo: {
-            mentionedJid: [m.sender],
-            groupMentions: [],
-            forwardingScore: 777,
-            isForwarded: true
-          }
+*_© SHADOW ASSISTENT ☃️_*
+`.trim()
+
+    let message = {
+        hasMediaAttachment: true,
+        header: {
+        
+            video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'}
         },
-        hasMediaAttachment: true
-      },
-      body: { text: '' }, 
-      footer: { text: menu },
-      nativeFlowMessage: {
-        buttons: [
-          { name: 'single_select', buttonParamsJson: '{"has_multiple_buttons":true}' },
-          { name: 'call_permission_request', buttonParamsJson: '{"has_multiple_buttons":true}' },
-          {
-            name: 'single_select',
-            buttonParamsJson:
-              '{"title":"𝚂𝚎𝚕𝚎𝚌𝚝 𝙼𝚎𝚗𝚞","sections":[{"title":"ɴᴀɢɪ sᴇɪsʜɪʀᴏ ᴀsɪsᴛᴇɴᴛ ☃️","highlight_label":"🧀","rows":[{"title":"Info Owner","description":"Información del creador","id":".owner"},{"title":"Info Bot","description":"Información del bot","id":".infobot"},{"title":"Menu All","description":"Menú completo","id":".allmenu"},{"title":"Auto Reg","description":"Registro automático","id":".reg user.19"},{"title":"Ping","description":"Velocidad del bot","id":".ping"},{"title":"Status","description":"Estado del bot","id":".status"}]}],"has_multiple_buttons":true}'
-          },
-          { name: 'cta_copy', buttonParamsJson: '{"display_text":"Copiar Código","id":"123456789","copy_code":"I Love You BrayanX330 😻"}' },
-          {
-            name: 'cta_url',
-            buttonParamsJson:
-              '{"display_text":"Canal de WhatsApp","url":"https:\\/\\/whatsapp.com\\/channel\\/0029Vb6BDQc0lwgsDN1GJ31i","merchant_url":"https:\\/\\/whatsapp.com\\/channel\\/0029Vb6BDQc0lwgsDN1GJ31i"}'
-          },
-          {
-            name: 'galaxy_message',
-            buttonParamsJson:
-              '{"mode":"published","flow_message_version":"3","flow_token":"1:1307913409923914:293680f87029f5a13d1ec5e35e718af3","flow_id":"1307913409923914","flow_cta":"ᴀᴄᴄᴇᴅᴇ ᴀ ʙᴏᴛ ᴀɪ","flow_action":"navigate","flow_action_payload":{"screen":"QUESTION_ONE","params":{"user_id":"123456789","referral":"campaign_xyz"}},"flow_metadata":{"flow_json_version":"201","data_api_protocol":"v2","flow_name":"Lead Qualification [en]","data_api_version":"v2","categories":["Lead Generation","Sales"]}}'
-          }
-        ]
-      }
+        footer: { text: menu },
+        body: { text: '' },
+        nativeFlowMessage: {
+            buttons: [
+                { 
+                    name: 'single_select', 
+                    buttonParamsJson: '{"has_multiple_buttons":true}' 
+                },
+                { 
+                    name: 'call_permission_request', 
+                    buttonParamsJson: '{"has_multiple_buttons":true}' 
+                },
+                { 
+                    name: 'single_select', 
+                    buttonParamsJson: JSON.stringify({
+                        title: "𝚂𝚎𝚕𝚎𝚌𝚝 𝙼𝚎𝚗𝚞",
+                        sections: [{
+                            title: "ɴᴀɢɪ sᴇɪsʜɪʀᴏ ᴀsɪsᴛᴇɴᴛ ☃️",
+                            highlight_label: "🧀",
+                            rows: [
+                                { title: "Info Owner", description: "Información del creador", id: ".owner" },
+                                { title: "Info Bot", description: "Información del bot", id: ".infobot" },
+                                { title: "Menu All", description: "Menú completo", id: ".allmenu" },
+                                { title: "Auto Reg", description: "Registro automático", id: ".reg user.19" },
+                                { title: "Ping", description: "Velocidad del bot", id: ".ping" },
+                                { title: "Status", description: "Estado del bot", id: ".status" }
+                            ]
+                        }],
+                        has_multiple_buttons: true
+                    })
+                },
+                { 
+                    name: 'cta_copy', 
+                    buttonParamsJson: '{"display_text":"Copiar Código","id":"123456789","copy_code":"I Love You BrayanX330 😻"}' 
+                },
+                { 
+                    name: 'cta_url', 
+                    buttonParamsJson: '{"display_text":"Canal de WhatsApp","url":"https:\\/\\/whatsapp.com\\/channel\\/0029Vb6BDQc0lwgsDN1GJ31i","merchant_url":"https:\\/\\/whatsapp.com\\/channel\\/0029Vb6BDQc0lwgsDN1GJ31i"}' 
+                },
+                { 
+                    name: 'galaxy_message', 
+                    buttonParamsJson: '{"mode":"published","flow_message_version":"3","flow_token":"1:1307913409923914:293680f87029f5a13d1ec5e35e718af3","flow_id":"1307913409923914","flow_cta":"ᴀᴄᴄᴇᴅᴇ ᴀ ʙᴏᴛ ᴀɪ","flow_action":"navigate","flow_action_payload":{"screen":"QUESTION_ONE","params":{"user_id":"123456789","referral":"campaign_xyz"}},"flow_metadata":{"flow_json_version":"201","data_api_protocol":"v2","flow_name":"Lead Qualification [en]","data_api_version":"v2","categories":["Lead Generation","Sales"]}}' 
+                }
+            ]
+        }
     }
-
+    
     await m.react('🌑')
-    await conn.sendMessage(m.chat, nativeFlowPayload, { quoted: m}) 
-
+    await conn.sendMessage(m.chat, { interactiveMessage: message }, { quoted: m, ephemeralExpiration: 60 * 60 * 24 * 7 }) // 7 días de expiración
 
 } catch (e) {
     await m.react('✖️')
@@ -199,4 +204,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-  }
+      }
