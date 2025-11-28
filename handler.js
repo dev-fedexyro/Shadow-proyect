@@ -145,6 +145,20 @@ if (isBannedGlobal && !isROwner) {
     return; 
 }
 
+const primaryChatId = global.db.data.settings.primaryChat;
+const currentChatId = m.chat;
+
+if (primaryChatId && primaryChatId !== currentChatId && !isROwner) { 
+    
+    if (m.isGroup && m.isCommand) {
+        const primaryChatName = await this.getName(primaryChatId) || 'el grupo exclusivo';
+        const exclusiveMsg = `🔒 *Modo Exclusivo Activo*\n\n*${botName}* solo responde comandos en su grupo exclusivo: *${primaryChatName}*.`;
+        conn.reply(m.chat, exclusiveMsg, m);
+    }
+    
+    return; 
+}
+
 
 if (opts["queque"] && m.text && !(isPrems)) {
 const queque = this.msgqueque, time = 1000 * 5
