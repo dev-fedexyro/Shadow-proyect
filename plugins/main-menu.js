@@ -37,7 +37,8 @@ Hola %name, soy *Shadow-Bot*.
 `.trim(),
   
   header: `
-╭── ⭒ *%category* `.trim(),
+╭── ⭒ *%category* 
+`.trim(),
 
   body: '│ ➩ %cmd %islimit %isPremium',
   footer: '╰──────────\n',
@@ -164,4 +165,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-  }
+            }
