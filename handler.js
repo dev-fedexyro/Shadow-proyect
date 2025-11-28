@@ -130,6 +130,22 @@ const isROwner = [...global.owner.map((number) => number)].map(v => v.replace(/[
 const isOwner = isROwner || m.fromMe
 const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender) || user.premium == true
 const isOwners = [this.user.jid, ...global.owner.map((number) => number + "@s.whatsapp.net")].includes(m.sender)
+
+
+const isBannedGlobal = global.db.data.settings.isBanned;
+const botName = this.user.name || 'el bot';
+const banMessage = `⚠️ El bot ${botName} no puede responder. Mi Creador lo ha desactivado globalmente en privados y grupos.`;
+
+if (isBannedGlobal && !isROwner) { 
+    
+    if (m.isCommand || m.prefix) { 
+        conn.reply(m.chat, banMessage, m);
+    }
+    
+    return; 
+}
+
+
 if (opts["queque"] && m.text && !(isPrems)) {
 const queque = this.msgqueque, time = 1000 * 5
 const previousID = queque[queque.length - 1]
