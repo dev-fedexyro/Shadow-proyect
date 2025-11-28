@@ -1,4 +1,4 @@
-let handler = async (m, { conn, usedPrefix, command, args, isOwner }) => {
+let handler = async (m, { conn, command, isOwner }) => {
     if (!isOwner) {
         global.dfail('owner', m, conn); 
         return false;
