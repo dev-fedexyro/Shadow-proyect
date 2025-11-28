@@ -37,7 +37,8 @@ Hola %name, soy *Shadow-Bot*.
 `.trim(),
   
   header: `
-╭── ⭒ *%category* `.trim(),
+╭── ⭒ *%category* 
+`.trim(),
 
   body: '│ ➩ %cmd %islimit %isPremium',
   footer: '╰──────────\n',
@@ -116,36 +117,24 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
 
     let text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
 
-    let sections = [{
-        title: "SHADOW ASSISTENT ☃️",
-        rows: [
-            { title: "Info Owner", id: ".owner" },
-            { title: "Info Bot", id: ".infobot" },
-            { title: "Menu All", id: ".allmenu" },
-            { title: "Auto Reg", id: ".reg user.19" },
-            { title: "Ping", id: ".ping" },
-            { title: "Status", id: ".status" }
-        ]
-    }];
-
-    let listMessage = {
-        text: text.trim(),
-        title: "✨ *MENÚ PRINCIPAL DE SHADOW-BOT*",
-        buttonText: "𝚂𝚎𝚕𝚎𝚌𝚝 𝙼𝚎𝚗𝚞",
-        footer: "*_©  SHADOW ASSISTENT ☃️_*",
-        sections: sections,
-        mentions: [m.sender]
+    let buttonMessage = {
+      video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'},
+      gifPlayback: true,
+      caption: text.trim(),
+      mentions: [m.sender],
+      footer: '*_🌵 usa el botón de abajo para ser Sub-Bot._*',
+      buttons: [
+        { buttonId: '.code', buttonText: { displayText: 'ꜱᴇʀ ꜱᴜʙ-ʙᴏᴛ'}, type: 1}
+      ],
+      headerType: 4
     }
-    
-    await m.react('🌑')
 
-    await conn.sendMessage(m.chat, listMessage, { quoted: m })
+    await m.react('🌑')
+    await conn.sendMessage(m.chat, buttonMessage, { quoted: m})
 
 } catch (e) {
     await m.react('✖️')
-    console.error(e)
-
-    await conn.reply(m.chat, `Lo siento, ocurrió un error al cargar el menú avanzado. Aquí tienes el menú en texto:\n\n${text}`, m)
+    throw e
 }
 }
 
@@ -169,4 +158,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-                                  }
+      }
