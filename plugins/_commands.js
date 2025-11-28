@@ -2,27 +2,6 @@ import PhoneNumber from 'awesome-phonenumber';
 import moment from 'moment-timezone';
 import path from 'path';
 
-let msm = 'Ocurrió un error.';
-let icons = 'https://files.catbox.moe/p0fk5h.jpg'; 
-let md = 'https://github.com/dev-fedexyro'; 
-
-let fkontak = (m) => {
-    return { 
-        "key": { 
-            "participants":"0@s.whatsapp.net", 
-            "remoteJid": "status@broadcast", 
-            "fromMe": false, 
-            "id": "Halo" 
-        }, 
-        "message": { 
-            "contactMessage": { 
-                "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` 
-            }
-        }, 
-        "participant": "0@s.whatsapp.net" 
-    }
-};
-
 function banderaEmoji(countryCode) {
     if (!countryCode || countryCode.length !== 2) return '';
     const codePoints = [...countryCode.toUpperCase()]
@@ -95,39 +74,36 @@ function suggestClosestCommands(command, allCommands, threshold = 40, limit = 3)
 async function sendNotFoundMessage(m, usedPrefix, command, topMatches) {
     const mundo = getCountryFlag(m.sender);
     
-    let info = `❌ Comando *\`${command}\`* no encontrado en la base de datos. 😅\n`;
-    info += `> ${mundo} Utiliza *\`${usedPrefix}menu\`* para ver la lista completa.\n\n`;
+    let replyMessage = `❌ Comando *\`${command}\`* no encontrado en la base de datos. 😅\n`;
+    replyMessage += `> ${mundo} Utiliza *\`${usedPrefix}menu\`* para ver la lista completa.\n\n`;
 
     if (topMatches.length > 0) {
-        info += `*💡 Sugerencias (por similitud):*\n`;
+        replyMessage += `*💡 Sugerencias (por similitud):*\n`;
         topMatches.forEach((match) => {
-            info += `  › \`${usedPrefix + match.cmd}\` (${match.similarity}%)\n`;
+            replyMessage += `  › \`${usedPrefix + match.cmd}\` (${match.similarity}%)\n`;
         });
     }
-
-    if (global.conn) {
-        await global.conn.sendMessage(m.chat, { 
-            text: info, 
-            contextInfo: {
-                mentionedJid: global.conn.parseMention(info),
-                externalAdReply: {
-                    title: `❌ Comando NO Encontrado`, 
-                    body: `${topMatches.length > 0 ? 'Revisa las sugerencias de abajo.' : msm}`,
-                    thumbnailUrl: icons, 
-                    sourceUrl: md, 
-                    mediaType: 1, 
-                    showAdAttribution: false,
-                    renderLargerThumbnail: true
-                }
-            }
-        }, { quoted: m });
-    } else {
-        await m.reply(info);
-    }
+    
+    await m.reply(replyMessage);
 }
 
 
 export async function before(m) {
+     let fkontak = { 
+        "key": { 
+            "participants":"0@s.whatsapp.net", 
+            "remoteJid": "status@broadcast", 
+            "fromMe": false, 
+            "id": "Halo" 
+        }, 
+        "message": { 
+            "contactMessage": { 
+                "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` 
+            }
+        }, 
+        "participant": "0@s.whatsapp.net" 
+    }
+
     if (!m.text || !global.prefix.test(m.text)) return;
 
     const usedPrefix = global.prefix.exec(m.text)[0];
@@ -143,6 +119,7 @@ export async function before(m) {
         
         if (chat.isBanned) {
             const mundo = getCountryFlag(m.sender);
+
             await m.reply(`🚫 El bot está desactivado en este chat. Un administrador puede usar \`${usedPrefix}unbanchat\` para reactivarlo.`);
             return true;
         }
@@ -158,4 +135,4 @@ export async function before(m) {
         
         return true; 
     }
-                        }
+    }
