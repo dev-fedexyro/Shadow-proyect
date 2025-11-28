@@ -115,72 +115,37 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
 }
 
     let text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
-        
-    let menu = `
-${text.trim()}
 
-*_© SHADOW ASSISTENT ☃️_*
-`.trim()
+    let sections = [{
+        title: "SHADOW ASSISTENT ☃️",
+        rows: [
+            { title: "Info Owner", id: ".owner" },
+            { title: "Info Bot", id: ".infobot" },
+            { title: "Menu All", id: ".allmenu" },
+            { title: "Auto Reg", id: ".reg user.19" },
+            { title: "Ping", id: ".ping" },
+            { title: "Status", id: ".status" }
+        ]
+    }];
 
-    let message = {
-        hasMediaAttachment: true,
-        header: {
-        
-            video: { url: 'https://cdn.russellxz.click/14cf14e9.mp4'}
-        },
-        footer: { text: menu },
-        body: { text: '' },
-        nativeFlowMessage: {
-            buttons: [
-                { 
-                    name: 'single_select', 
-                    buttonParamsJson: '{"has_multiple_buttons":true}' 
-                },
-                { 
-                    name: 'call_permission_request', 
-                    buttonParamsJson: '{"has_multiple_buttons":true}' 
-                },
-                { 
-                    name: 'single_select', 
-                    buttonParamsJson: JSON.stringify({
-                        title: "𝚂𝚎𝚕𝚎𝚌𝚝 𝙼𝚎𝚗𝚞",
-                        sections: [{
-                            title: "ɴᴀɢɪ sᴇɪsʜɪʀᴏ ᴀsɪsᴛᴇɴᴛ ☃️",
-                            highlight_label: "🧀",
-                            rows: [
-                                { title: "Info Owner", description: "Información del creador", id: ".owner" },
-                                { title: "Info Bot", description: "Información del bot", id: ".infobot" },
-                                { title: "Menu All", description: "Menú completo", id: ".allmenu" },
-                                { title: "Auto Reg", description: "Registro automático", id: ".reg user.19" },
-                                { title: "Ping", description: "Velocidad del bot", id: ".ping" },
-                                { title: "Status", description: "Estado del bot", id: ".status" }
-                            ]
-                        }],
-                        has_multiple_buttons: true
-                    })
-                },
-                { 
-                    name: 'cta_copy', 
-                    buttonParamsJson: '{"display_text":"Copiar Código","id":"123456789","copy_code":"I Love You BrayanX330 😻"}' 
-                },
-                { 
-                    name: 'cta_url', 
-                    buttonParamsJson: '{"display_text":"Canal de WhatsApp","url":"https:\\/\\/whatsapp.com\\/channel\\/0029Vb6BDQc0lwgsDN1GJ31i","merchant_url":"https:\\/\\/whatsapp.com\\/channel\\/0029Vb6BDQc0lwgsDN1GJ31i"}' 
-                },
-                { 
-                    name: 'galaxy_message', 
-                    buttonParamsJson: '{"mode":"published","flow_message_version":"3","flow_token":"1:1307913409923914:293680f87029f5a13d1ec5e35e718af3","flow_id":"1307913409923914","flow_cta":"ᴀᴄᴄᴇᴅᴇ ᴀ ʙᴏᴛ ᴀɪ","flow_action":"navigate","flow_action_payload":{"screen":"QUESTION_ONE","params":{"user_id":"123456789","referral":"campaign_xyz"}},"flow_metadata":{"flow_json_version":"201","data_api_protocol":"v2","flow_name":"Lead Qualification [en]","data_api_version":"v2","categories":["Lead Generation","Sales"]}}' 
-                }
-            ]
-        }
+    let listMessage = {
+        text: text.trim(),
+        title: "✨ *MENÚ PRINCIPAL DE SHADOW-BOT*",
+        buttonText: "𝚂𝚎𝚕𝚎𝚌𝚝 𝙼𝚎𝚗𝚞",
+        footer: "*_©  SHADOW ASSISTENT ☃️_*",
+        sections: sections,
+        mentions: [m.sender]
     }
     
     await m.react('🌑')
-    await conn.sendMessage(m.chat, { interactiveMessage: message }, { quoted: m, ephemeralExpiration: 60 * 60 * 24 * 7 }) // 7 días de expiración
+
+    await conn.sendMessage(m.chat, listMessage, { quoted: m })
 
 } catch (e) {
     await m.react('✖️')
-    throw e
+    console.error(e)
+
+    await conn.reply(m.chat, `Lo siento, ocurrió un error al cargar el menú avanzado. Aquí tienes el menú en texto:\n\n${text}`, m)
 }
 }
 
@@ -204,4 +169,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-      }
+                                  }
