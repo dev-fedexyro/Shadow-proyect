@@ -37,8 +37,7 @@ Hola %name, soy *Shadow-Bot*.
 `.trim(),
   
   header: `
-╭── ⭒ *%category* 
-`.trim(),
+╭── ⭒ *%category* `.trim(),
 
   body: '│ ➩ %cmd %islimit %isPremium',
   footer: '╰──────────\n',
@@ -72,48 +71,55 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname}) => {
         }
       }
     }
-
-    let menuText = [
-      defaultMenu.before,
-...Object.keys(tags)
-        .filter(tag => help.some(menu => menu.tags.includes(tag) && menu.help))
-        .map(tag => {
-          let section = help.filter(menu => menu.tags.includes(tag) && menu.help)
-            .map(menu => menu.help.map(cmd =>
-              defaultMenu.body
-                .replace(/%cmd/g, menu.prefix? cmd: _p + cmd)
-                .replace(/%islimit/g, menu.limit? '◜⭐◞': '')
-                .replace(/%isPremium/g, menu.premium? '◜🪪◞': '')
-            ).join('\n')).join('\n')
-
-          if (section.trim()) {
-            return defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer
+    
+    let groups = {}
+    for (let plugin of help) {
+      if (plugin.tags && plugin.tags.length)
+        if (plugin.help)
+          for (const tag of plugin.tags) {
+            if (!(tag in groups)) groups[tag] = []
+            groups[tag].push(plugin)
           }
-          return ''
-        }),
-      defaultMenu.after
-    ].join('\n')
+    }
 
-    let greeting = getGreeting()
-    let replace = {
-      '%': '%',
-      p: _p,
-      uptime,
-      _uptime,
-      taguser: '@' + m.sender.split("@")[0],
-      name,
-      level,
-      limit,
-      exp: exp - min,
-      maxexp: xp,
-      totalexp: exp,
-      xp4levelup: max - exp,
-      totalreg,
-      rtotalreg,
-      greeting,
-      textbot: 'Gracias por usar a Shadow-Bot!',
-      readmore: String.fromCharCode(8206).repeat(4001)
-}
+    let menuText = defaultMenu.before
+    for (const tag in tags) {
+      if (tag in groups) {
+        let section = groups[tag]
+          .map(plugin => plugin.help.map(cmd =>
+            defaultMenu.body
+              .replace(/%cmd/g, plugin.prefix? cmd: _p + cmd)
+              .replace(/%islimit/g, plugin.limit? '◜⭐◞': '')
+              .replace(/%isPremium/g, plugin.premium? '◜🪪◞': '')
+          ).join('\n')).join('\n')
+
+        if (section.trim()) {
+          menuText += defaultMenu.header.replace(/%category/g, tags[tag]) + '\n' + section + '\n' + defaultMenu.footer
+        }
+      }
+    }
+    menuText += defaultMenu.after
+
+    const greeting = getGreeting()
+    
+    let replace = {}
+    replace['%'] = '%'
+    replace.p = _p
+    replace.uptime = uptime
+    replace._uptime = _uptime
+    replace.taguser = '@' + m.sender.split("@")[0]
+    replace.name = name
+    replace.level = level
+    replace.limit = limit
+    replace.exp = exp - min
+    replace.maxexp = xp
+    replace.totalexp = exp
+    replace.xp4levelup = max - exp
+    replace.totalreg = totalreg
+    replace.rtotalreg = rtotalreg
+    replace.greeting = greeting
+    replace.textbot = 'Gracias por usar a Shadow-Bot!'
+    replace.readmore = String.fromCharCode(8206).repeat(4001)
 
     let text = menuText.replace(new RegExp(`%(${Object.keys(replace).join('|')})`, 'g'), (_, key) => replace[key])
 
@@ -158,4 +164,4 @@ function getGreeting() {
   if (hour < 12) return 'una linda mañana ✨'
   if (hour < 18) return 'una linda tarde 🌇'
   return 'una linda noche 🌙'
-                         }
+  }
