@@ -35,6 +35,7 @@ Hola %name, soy *Shadow-Bot*.
 
 *▪︎──LISTA DE COMANDOS──▪︎*
 `.trim(),
+
   
   header: `
 ╭── ⭒ *%category* 
