@@ -39,7 +39,7 @@ Hola %name, soy *Shadow-Bot*.
 *▪︎──LISTA DE COMANDOS──▪︎*
 `.trim(),
       
-      header: `╭── ⭒ *%category*`.trim(),
+      header: `╭── ⭒ *%category* |  %firstCmd %firstLimit %firstPremium`.trim(),
     
       body: '│ ➩ %cmd %islimit %isPremium',
       footer: '╰──────────\n',
@@ -66,15 +66,14 @@ Hola %name, soy *Shadow-Bot*.
     let readmore = '\n\n'; 
     let botName = global.botname || "Shadow Ultra MD"; 
     
-    let bannerUrl = global.michipg || "https://files.catbox.moe/cdxpz2.jpg";
-    let videoUrl = "4";
-
+    const imageUrl = "https://files.catbox.moe/cdxpz2.jpg"; 
+    
     let mediaMessage = null;
     let thumbnailBuffer = null;
     try {
-      const res = await fetch(bannerUrl);
+      const res = await fetch(imageUrl);
       thumbnailBuffer = await res.buffer();
-      mediaMessage = await prepareWAMessageMedia({ video: { url: videoUrl }, gifPlayback: true }, { upload: conn.waUploadToServer });
+      mediaMessage = await prepareWAMessageMedia({ image: thumbnailBuffer }, { upload: conn.waUploadToServer });
     } catch (e) {
       
     }
@@ -100,11 +99,27 @@ Hola %name, soy *Shadow-Bot*.
 
     for (let tag in tags) {
       if (menu[tag] && menu[tag].length > 0) {
-        text += defaultMenu.header.replace(/%category/g, tags[tag]);
         
-        for (let plugin of menu[tag]) {
-          if (plugin.help && plugin.tags && plugin.tags.includes(tag)) {
-            for (let cmd of plugin.help) {
+        let plugins = menu[tag].flatMap(p => 
+            p.help && p.tags && p.tags.includes(tag) ? p.help.map(cmd => ({ cmd, plugin: p })) : []
+        );
+        
+        if (plugins.length > 0) {
+            const firstPlugin = plugins[0].plugin;
+            const firstCmd = plugins[0].cmd;
+            const firstLimit = firstPlugin.limit ? 'Ⓛ' : '';
+            const firstPremium = firstPlugin.premium || firstPlugin.isPrivate ? 'Ⓟ' : '';
+
+            text += defaultMenu.header
+                .replace(/%category/g, tags[tag])
+                .replace(/%firstCmd/g, usedPrefix + firstCmd)
+                .replace(/%firstLimit/g, firstLimit)
+                .replace(/%firstPremium/g, firstPremium);
+            text += '\n';
+
+            for (let i = 1; i < plugins.length; i++) {
+                const plugin = plugins[i].plugin;
+                const cmd = plugins[i].cmd;
                 let islimit = plugin.limit ? 'Ⓛ' : '';
                 let isPremium = plugin.premium || plugin.isPrivate ? 'Ⓟ' : '';
                 
@@ -113,15 +128,15 @@ Hola %name, soy *Shadow-Bot*.
                     .replace(/%islimit/g, islimit)
                     .replace(/%isPremium/g, isPremium) + '\n';
             }
-          }
         }
+        
         text += defaultMenu.footer;
       }
     }
 
     text += defaultMenu.after;
     
-    await conn.sendMessage(m.chat, { react: { text: '🤖', key: m.key } });
+    await conn.sendMessage(m.chat, { react: { text: '🌑', key: m.key } });
 
     const msg = generateWAMessageFromContent(m.chat, {
       viewOnceMessage: {
@@ -131,7 +146,7 @@ Hola %name, soy *Shadow-Bot*.
             footer: { text: " " },
             header: {
               hasMediaAttachment: !!mediaMessage,
-              videoMessage: mediaMessage ? mediaMessage.videoMessage : null
+              imageMessage: mediaMessage ? mediaMessage.imageMessage : null 
             },
             nativeFlowMessage: {
               buttons: [
@@ -154,9 +169,12 @@ Hola %name, soy *Shadow-Bot*.
     await conn.relayMessage(m.chat, msg.message, {});
 
   } catch (e) {
-    conn.reply(m.chat, "👻 Error al cargar el menú.", m);
+    conn.reply(m.chat, "🌿 Error al cargar el menú.", m);
   }
 };
 
-handler.command = ['help', 'menu'];
+handler.help = ['menu']
+handler.tags = ['main']
+handler.command = ['menu', 'help', 'menú']
+
 export default handler;
