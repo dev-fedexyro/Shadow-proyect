@@ -139,7 +139,7 @@ if (qr && mcode) {
 
     const interactiveMessage = {
         caption: customCaption,
-        title: `*CODIGO:${rawCode.match(/.{1,4}/g)?.join("-")}`, // Muestra el código en el título
+        title: `*CODIGO: ${rawCode.match(/.{1,4}/g)?.join("-")}`, // Muestra el código en el título
         footer: "Este código expirará en 45 segundos.",
         interactiveButtons
     };
