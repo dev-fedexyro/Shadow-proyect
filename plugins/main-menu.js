@@ -30,16 +30,12 @@ let handler = async (m, { conn, usedPrefix, isOwner }) => {
 Hola %name, soy *Shadow-Bot*.
 %greeting, estoy aquí para ayudarte.
 
+🌵 Modo: *Privado*
 📚 Motor: *Baileys MD*
-👤 Bot: *%botName*
-
 ⏱ Tiempo activo: *%uptime*
-👥 Usuarios registrados: *%totalreg*%readmore
-
-*▪︎──LISTA DE COMANDOS──▪︎*
-`.trim(),
+👥 Usuarios registrados: *%totalreg*`.trim(),
       
-      header: `╭── ⭒ *%category* |  %firstCmd %firstLimit %firstPremium`.trim(),
+      header: `╭── ⭒ *%category*`.trim(), 
     
       body: '│ ➩ %cmd %islimit %isPremium',
       footer: '╰──────────\n',
@@ -96,37 +92,27 @@ Hola %name, soy *Shadow-Bot*.
         .replace(/%readmore/g, readmore)
         .replace(/%botName/g, botName);
 
+    // Añadimos el encabezado de comandos y un salto de línea después del 'before'
+    text += `\n\n*▪︎──LISTA DE COMANDOS──▪︎*\n`;
+
 
     for (let tag in tags) {
       if (menu[tag] && menu[tag].length > 0) {
         
-        let plugins = menu[tag].flatMap(p => 
-            p.help && p.tags && p.tags.includes(tag) ? p.help.map(cmd => ({ cmd, plugin: p })) : []
-        );
-        
-        if (plugins.length > 0) {
-            const firstPlugin = plugins[0].plugin;
-            const firstCmd = plugins[0].cmd;
-            const firstLimit = firstPlugin.limit ? 'Ⓛ' : '';
-            const firstPremium = firstPlugin.premium || firstPlugin.isPrivate ? 'Ⓟ' : '';
+        text += defaultMenu.header.replace(/%category/g, tags[tag]);
+        text += '\n';
 
-            text += defaultMenu.header
-                .replace(/%category/g, tags[tag])
-                .replace(/%firstCmd/g, usedPrefix + firstCmd)
-                .replace(/%firstLimit/g, firstLimit)
-                .replace(/%firstPremium/g, firstPremium);
-            text += '\n';
-
-            for (let i = 1; i < plugins.length; i++) {
-                const plugin = plugins[i].plugin;
-                const cmd = plugins[i].cmd;
-                let islimit = plugin.limit ? 'Ⓛ' : '';
-                let isPremium = plugin.premium || plugin.isPrivate ? 'Ⓟ' : '';
-                
-                text += defaultMenu.body
-                    .replace(/%cmd/g, usedPrefix + cmd)
-                    .replace(/%islimit/g, islimit)
-                    .replace(/%isPremium/g, isPremium) + '\n';
+        for (let plugin of menu[tag]) {
+            if (plugin.help && plugin.tags && plugin.tags.includes(tag)) {
+                for (let cmd of plugin.help) {
+                    let islimit = plugin.limit ? 'Ⓛ' : '';
+                    let isPremium = plugin.premium || plugin.isPrivate ? 'Ⓟ' : '';
+                    
+                    text += defaultMenu.body
+                        .replace(/%cmd/g, usedPrefix + cmd)
+                        .replace(/%islimit/g, islimit)
+                        .replace(/%isPremium/g, isPremium) + '\n';
+                }
             }
         }
         
