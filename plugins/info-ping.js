@@ -39,7 +39,7 @@ var handler = async (m, { conn }) => {
         .filter(([jid, chat]) => jid.endsWith('@g.us') && chat.isChats && !chat.metadata?.read_only && !chat.metadata?.announce)
         .map(v => v[0])
 
-    let texto = '\`\`\`${latensi.toFixed(4)} ms\`\`\``
+    let texto = `\`${latensi.toFixed(4)} ms\``
 
     const thumbnailBuffer = await getImageUrlBuffer()
 
@@ -73,4 +73,4 @@ function clockString(ms) {
     let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
     let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
     return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':')
-                }
+}
