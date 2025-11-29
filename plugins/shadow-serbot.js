@@ -17,8 +17,9 @@ let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = "🔮 *SHADOW | VINCULACIÓN QR*\n\n**PROCESO PARA SER SUB-BOT TEMPORAL:**\n\n\`1\` » Abre WhatsApp y ve a *Dispositivos Vinculados*.\n\n\`2\` » Escanea el código QR que aparecerá inmediatamente.\n\n⚠️ **NOTA:** El QR expira rápidamente (45 segundos). Asegúrate de tener tu lector de QR listo. Si el código no carga, usa `#code`."
-let rtx2 = "🗝️ *SHADOW | CÓDIGO DE ENLACE*\n\n**INGRESA ESTE CÓDIGO (8 DÍGITOS):**\n\n\`1\` » Ve a *Dispositivos Vinculados* en WhatsApp.\n\n\`2\` » Selecciona *Vincular con el número de teléfono*.\n\n\`3\` » Introduce el código que se enviará en el siguiente mensaje.\n\n🚫 **SEGURIDAD:** Esta sesión temporal no debe ser vinculada a tu cuenta principal."
+let rtx = "🔮 *ꜱʜᴀᴅᴏᴡ | ᴠɪɴᴄᴜʟᴀᴄɪóɴ Qʀ*\n\n*ᴘʀᴏᴄᴇꜱᴏ ᴘᴀʀᴀ ꜱᴇʀ ꜱᴜʙ-ʙᴏᴛ ᴛᴇᴍᴘᴏʀᴀʟ:*\n\n\`1\` » ᴀʙʀᴇ WʜᴀᴛꜱAᴘᴘ ʏ ᴠᴇ ᴀ *Dɪꜱᴘᴏꜱɪᴛɪᴠᴏꜱ Vɪɴᴄᴜʟᴀᴅᴏꜱ*.\n\n\`2\` » Eꜱᴄᴀɴᴇᴀ ᴇʟ ᴄóᴅɪɢᴏ Qʀ Qᴜᴇ ᴀᴘᴀʀᴇᴄᴇʀá ɪɴᴍᴇᴅɪᴀᴛᴀᴍᴇɴᴛᴇ.\n\n⚠️ *ɴᴏᴛᴀ:* Eʟ Qʀ ᴇxᴘɪʀᴀ ʀáᴘɪᴅᴀᴍᴇɴᴛᴇ (45 ꜱᴇɢᴜɴᴅᴏꜱ). Aꜱᴇɢúʀᴀᴛᴇ ᴅᴇ ᴛᴇɴᴇʀ ᴛᴜ ʟᴇᴄᴛᴏʀ ᴅᴇ Qʀ ʟɪꜱᴛᴏ. ꜱɪ ᴇʟ ᴄóᴅɪɢᴏ ɴᴏ ᴄᴀʀɢᴀ, ᴜꜱᴀ `#code`."
+
+let rtx2 = "🗝️ *ꜱʜᴀᴅᴏᴡ | ᴄóᴅɪɢᴏ ᴅᴇ ᴇɴʟᴀᴄᴇ*\n\n*ɪɴɢʀᴇꜱᴀ ᴇꜱᴛᴇ ᴄóᴅɪɢᴏ (8 ᴅíɢɪᴛᴏꜱ):*\n\n\`1\` » Vᴇ ᴀ *Dɪꜱᴘᴏꜱɪᴛɪᴠᴏꜱ Vɪɴᴄᴜʟᴀᴅᴏꜱ* ᴇɴ WʜᴀᴛꜱAᴘᴘ.\n\n\`2\` » Sᴇʟᴇᴄᴄɪᴏɴᴀ *Vɪɴᴄᴜʟᴀʀ ᴄᴏɴ ᴇʟ ɴúᴍᴇʀᴏ ᴅᴇ ᴛᴇʟéꜰᴏɴᴏ*.\n\n\`3\` » Iɴᴛʀᴏᴅᴜᴄᴇ ᴇʟ ᴄóᴅɪɢᴏ Qᴜᴇ ꜱᴇ ᴇɴᴠɪᴀʀá ᴇɴ ᴇʟ ꜱɪɢᴜɪᴇɴᴛᴇ ᴍᴇɴꜱᴀᴊᴇ.\n\n🚫 *ꜱᴇɢᴜʀɪᴅᴀᴅ:* Eꜱᴛᴀ ꜱᴇꜱɪóɴ ᴛᴇᴍᴘᴏʀᴀʟ ɴᴏ ᴅᴇʙᴇ ꜱᴇʀ ᴠɪɴᴄᴜʟᴀᴅᴀ ᴀ ᴛᴜ ᴄᴜᴇɴᴛᴀ ᴘʀɪɴᴄɪᴘᴀʟ."
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const shadowJBOptions = {}
