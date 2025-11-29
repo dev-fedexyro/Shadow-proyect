@@ -59,7 +59,7 @@ command = 'qr'
 args.unshift('code')
 }
 const mcode = args[0] && /(--code|code)/.test(args[0].trim()) ? true : args[1] && /(--code|code)/.test(args[1].trim()) ? true : false
-let txtCode, codeBot, txtQR
+let txtCode, txtQR
 if (mcode) {
 args[0] = args[0].replace(/^--code$|^code$/, "").trim()
 if (args[1]) args[1] = args[1].replace(/^--code$|^code$/, "").trim()
@@ -108,12 +108,11 @@ const { connection, lastDisconnect, isNewLogin, qr } = update
 if (isNewLogin) sock.isInit = false
 
 if (qr && !mcode) {
-    const rtxCaption = `🔮 *ꜱʜᴀᴅᴏᴡ | ᴠɪɴᴄᴜʟᴀᴄɪóɴ Qʀ*\n\n*ᴘʀᴏᴄᴇꜱᴏ ᴘᴀʀᴀ ꜱᴇʀ ꜱᴜʙ-ʙᴏᴛ ᴛᴇᴍᴘᴏʀᴀʟ:*\n\n\`1\` » ᴀʙʀᴇ WʜᴀᴛꜱAᴘᴘ ʏ ᴠᴇ ᴀ *Dɪꜱᴘᴏꜱɪᴛɪᴠᴏꜱ Vɪɴᴄᴜʟᴀᴅᴏꜱ*.\n\n\`2\` » Eꜱᴄᴀɴᴇᴀ ᴇʟ ᴄóᴅɪɢᴏ Qʀ Qᴜᴇ ᴀᴘᴀʀᴇᴄᴇʀá ɪɴᴍᴇᴅɪᴀᴛᴀᴍᴇɴᴛᴇ.\n\n⚠️ *ɴᴏᴛᴀ:* Eʟ Qʀ ᴇxᴘɪʀᴀ ʀáᴘɪᴅᴀᴍᴇɴᴛᴇ (45 ꜱᴇɢᴜɴᴅᴏꜱ). Aꜱᴇɢúʀᴀᴛᴇ ᴅᴇ ᴛᴇɴᴇʀ ᴛᴜ ʟᴇᴄᴛᴏʀ ᴅᴇ Qʀ ʟɪꜱᴛᴏ. ꜱɪ ᴇʟ ᴄóᴅɪɢᴏ ɴᴏ ᴄᴀʀɢᴀ, ᴜꜱᴀ `#code``;
 
     if (m?.chat) {
         txtQR = await conn.sendMessage(m.chat, { 
             image: await qrcode.toBuffer(qr, { scale: 8 }), 
-            caption: rtxCaption
+            caption: ``
         }, { quoted: m});
     } else {
         return 
@@ -126,7 +125,7 @@ if (qr && !mcode) {
 if (qr && mcode) {
     let rawCode = await sock.requestPairingCode((m.sender.split`@`[0]))
     
-    const customCaption = `*ꜱʜᴀᴅᴏᴡ | ᴄóᴅɪɢᴏ*\n\n**ɪɴɢʀᴇꜱᴀ ᴇꜱᴛᴇ ᴄóᴅɪɢᴏ (8 ᴅíɢɪᴛᴏꜱ):**\n\n\`1\` » Vᴇ ᴀ *Dɪꜱᴘᴏꜱɪᴛɪᴠᴏꜱ Vɪɴᴄᴜʟᴀᴅᴏꜱ* ᴇɴ WʜᴀᴛꜱAᴘᴘ.\n\n\`2\` » Sᴇʟᴇᴄᴄɪᴏɴᴀ *Vɪɴᴄᴜʟᴀʀ ᴄᴏɴ ᴇʟ ɴúᴍᴇʀᴏ ᴅᴇ ᴛᴇʟéꜰᴏɴᴏ*.\n\n\`3\` » Iɴᴛʀᴏᴅᴜᴄᴇ ᴇʟ ᴄóᴅɪɢᴏ Qᴜᴇ ꜱᴇ ᴇɴᴠɪᴀʀá ᴇɴ ᴇʟ ꜱɪɢᴜɪᴇɴᴛᴇ ᴍᴇɴꜱᴀᴊᴇ.\n\n🚫 **ꜱᴇɢᴜʀɪᴅᴀᴅ:** Eꜱᴛᴀ ꜱᴇꜱɪóɴ ᴛᴇᴍᴘᴏʀᴀʟ ɴᴏ ᴅᴇʙᴇ ꜱᴇʀ ᴠɪɴᴄᴜʟᴀᴅᴀ ᴀ ᴛᴜ ᴄᴜᴇɴᴛᴀ ᴘʀɪɴᴄɪᴘᴀʟ.`;
+    const customCaption = `*ꜱʜᴀᴅᴏᴡ | ᴄóᴅɪɢᴏ ᴅᴇ ᴇɴʟᴀᴄᴇ*\n\n**ɪɴɢʀᴇꜱᴀ ᴇꜱᴛᴇ ᴄóᴅɪɢᴏ (8 ᴅíɢɪᴛᴏꜱ):**\n\n\`1\` » Vᴇ ᴀ *Dɪꜱᴘᴏꜱɪᴛɪᴠᴏꜱ Vɪɴᴄᴜʟᴀᴅᴏꜱ* ᴇɴ WʜᴀᴛꜱAᴘᴘ.\n\n\`2\` » Sᴇʟᴇᴄᴄɪᴏɴᴀ *Vɪɴᴄᴜʟᴀʀ ᴄᴏɴ ᴇʟ ɴúᴍᴇʀᴏ ᴅᴇ ᴛᴇʟéꜰᴏɴᴏ*.\n\n\`3\` » Iɴᴛʀᴏᴅᴜᴄᴇ ᴇʟ ᴄóᴅɪɢᴏ Qᴜᴇ ꜱᴇ ᴇɴᴠɪᴀʀá ᴇɴ ᴇʟ ꜱɪɢᴜɪᴇɴᴛᴇ ᴍᴇɴꜱᴀᴊᴇ.\n\n🚫 **ꜱᴇɢᴜʀɪᴅᴀᴅ:** Eꜱᴛᴀ ꜱᴇꜱɪóɴ ᴛᴇᴍᴘᴏʀᴀʟ ɴᴏ ᴅᴇʙᴇ ꜱᴇʀ ᴠɪɴᴄᴜʟᴀᴅᴀ ᴀ ᴛᴜ ᴄᴜᴇɴᴛᴀ ᴘʀɪɴᴄɪᴘᴀʟ.`;
 
     const interactiveButtons = [{
         name: "cta_copy",
@@ -139,21 +138,20 @@ if (qr && mcode) {
 
     const interactiveMessage = {
         caption: customCaption,
-        title: `*CODIGO: ${rawCode.match(/.{1,4}/g)?.join("-")}`, // Muestra el código en el título
+        title: `*CÓDIGO:* ${rawCode.match(/.{1,4}/g)?.join("-")}`, // Muestra el código en el título
         footer: "Este código expirará en 45 segundos.",
         interactiveButtons
     };
 
     txtCode = await conn.sendMessage(m.chat, interactiveMessage, { quoted: m });
-    codeBot = null
-
+    
     console.log(rawCode)
 }
 if (txtCode && txtCode.key) {
 setTimeout(() => { conn.sendMessage(m.sender, { delete: txtCode.key })}, 30000)
 }
-if (codeBot && codeBot.key) {
-setTimeout(() => { conn.sendMessage(m.sender, { delete: codeBot.key })}, 30000)
+if (txtQR && txtQR.key) {
+setTimeout(() => { conn.sendMessage(m.sender, { delete: txtQR.key })}, 30000)
 }
 const endSesion = async (loaded) => {
 if (!loaded) {
