@@ -5,7 +5,7 @@ const { generateWAMessageFromContent, proto, prepareWAMessageMedia} = (await imp
 let handler = async (m, { conn, text}) => {
 
   if (!text) {
-    return conn.reply(m.chat, `🖼️ Responde a una imagen/sticker para reducirlo o envíala con el comando.\n\n🌵 Ejemplo: *.reduce 300×300*`, m);
+    return conn.reply(m.chat, `🌵 Responde a una imagen/sticker para reducirlo o envíala con el comando.\n\n🌵 Ejemplo: *.reduce 300×300*`, m);
 }
 
   let input = text.trim().split(/[x×]/i);
@@ -22,7 +22,7 @@ let handler = async (m, { conn, text}) => {
 } else if (/image|sticker/.test(m.mtype)) {
     media = await m.download();
 } else {
-    return conn.reply(m.chat, `🖼️ Responde a una imagen/sticker para reducirlo o envíala con el comando.\n\n🌵 Ejemplo: *.reduce 300×300*`, m);
+    return conn.reply(m.chat, `🌱 Responde a una imagen/sticker para reducirlo o envíala con el comando.\n\n🌵 Ejemplo: *.reduce 300×300*`, m);
 }
 
   try {
