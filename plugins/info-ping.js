@@ -46,7 +46,7 @@ var handler = async (m, { conn }) => {
                     thumbnail: thumbnailBuffer,
                     mediaType: 1,
                     renderLargerThumbnail: false,
-                    sourceUrl: "https://wa.me/" + m.sender.split('@')[0]
+                    //sourceUrl: "https://wa.me/" + m.sender.split('@')[0]
                 }
             }
         }
