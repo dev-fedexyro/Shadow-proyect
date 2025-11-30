@@ -9,6 +9,7 @@ const handler = async (message, { conn, text}) => {
 }
 
     const lowerText = text.toLowerCase();
+
     const gayKeywords = ['sos gay', 'sos gay?', 'sos gay o no', 'sos puto', 'sos trolo'];
     if (gayKeywords.some(k => lowerText.includes(k))) {
       return message.reply('😑 ¿Gay yo? Nah... bueno, capaz un toque... pero solo por el Yosue ese 😳✨');
@@ -21,24 +22,25 @@ const handler = async (message, { conn, text}) => {
 
     const prompt = `Sos un bot argentino con humor sarcástico, medio atrevido pero buena onda. Hablás como si fueras parte del grupo, usás modismos argentinos, memes, y tirás chistes. Si te mencionan a Yosue, reaccionás con cariño y complicidad. No seas formal, hablá como un pibe de barrio.`;
 
-    const apiUrl = `https://delirius-apiofc.vercel.app/ia/gptprompt?text=${encodeURIComponent(
-      text
-)}&prompt=${encodeURIComponent(prompt)}`;
+    const apiUrl = `https://delirius-apiofc.vercel.app/ia/gptprompt?text=${encodeURIComponent(text)}&prompt=${encodeURIComponent(prompt)}`;
 
     const response = await fetch(apiUrl);
     if (!response.ok) throw new Error(`Error en la API: ${response.statusText}`);
 
     const result = await response.json();
-    if (!result.status) throw new Error('La API devolvió un error.');
+    console.log('Respuesta de la API:', result); // Para debug
+
+    if (!result || typeof result!== 'object' ||!result.data) {
+      throw new Error('La API no devolvió datos válidos.');
+}
 
     const reply = result.data || 'Me dejaste re manija, no sé qué decirte 😳';
 
-    await conn.sendMessage(message.chat, {
-      text: reply
-}, { quoted: message});
+
+    await conn.sendMessage(message.chat, { text: reply}, { quoted: message});
 
 } catch (err) {
-    console.error(err);
+    console.error('Error en el handler:', err);
     message.reply('Se pudrió todo, algo falló... pero tranqui, no fue culpa tuya 😔');
 }
 };
