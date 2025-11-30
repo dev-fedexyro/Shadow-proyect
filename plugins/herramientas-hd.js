@@ -1,98 +1,112 @@
-import fetch from 'node-fetch'
-import FormData from 'form-data'
+import { upscaleWithIloveimg, VALID_SCALES } from '../lib/iloveimgUpscale.js'
 
-const handler = async (m, { conn, usedPrefix}) => {
-  const q = m.quoted || m
-  const mime = (q.msg || q).mimetype || q.mediaType || ''
+function parseScale(args = []) {
+  for (let i = 0; i < args.length; i += 1) {
+    const token = args[i]
+    if (!token) continue
 
-  if (!mime) return conn.reply(m.chat, '🌱 Por favor, responde a una imagen con el comando.', m)
-  if (!/image\/(jpe?g|png)/.test(mime)) return conn.reply(m.chat, `🌵 Formato no compatible (${mime}). Usa una imagen JPG o PNG.`, m)
+    const direct = token.match(/^([248])(?:x)?$/i)
+    if (direct) return Number(direct[1])
 
-  const buffer = await q.download()
-  if (!buffer || buffer.length < 1000) return conn.reply(m.chat, '🌱 Imagen no válida o demasiado pequeña.', m)
+    const flag = token.match(/^--?(?:scale|x)(?:=(\d+))?$/i)
+    if (flag) {
+      if (flag[1]) return Number(flag[1])
+      const next = args[i + 1]
+      if (next && /^\d+$/.test(next)) return Number(next)
+    }
+  }
+  return 2
+}
 
-  await m.react('🌱')
+function pickFileName(mime, scale) {
+  if (/png/i.test(mime)) return `iloveimg_x${scale}.png`
+  return `iloveimg_x${scale}.jpg`
+}
 
+async function makeFkontak() {
   try {
-    const url = await uploadToUguu(buffer)
-    const engines = [upscaleSiputzx, upscaleVreden]
-
-    const wrapped = engines.map(fn =>
-      fn(url)
-.then(res => ({ engine: fn.engineName, result: res}))
-.catch(err => Promise.reject({ engine: fn.engineName, error: err}))
-)
-
-    const { engine, result} = await Promise.any(wrapped)
-
-    await conn.sendFile(
-      m.chat,
-      Buffer.isBuffer(result)? result: result,
-      'imagen.jpg',
-      `🌵 Imagen mejorada\n✔️ Procesada con éxito.\n🔧 Servidor: \`${engine}\``,
-      m
-)
-
-    await m.react('🌵')
-} catch (err) {
-    await m.react('🌱')
-
-    const fallback = Array.isArray(err.errors)
-? err.errors.map(e => `• ${e?.engine || 'Desconocido'}: ${e?.error?.message || e?.message || String(e)}`).join('\n')
-: `• ${err?.engine || 'Desconocido'}: ${err?.error?.message || err?.message || String(err)}`
-
-    await conn.reply(
-      m.chat,
-      `🌱 Error, no se pudo mejorar la imagen.\n\n${fallback}`,
-      m
-)
-}
+    const res = await fetch('https://i.postimg.cc/pLh4hJ7D/download-(1)-(1).png')
+    const thumb2 = Buffer.from(await res.arrayBuffer())
+    return {
+      key: { participants: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
+      message: { locationMessage: { name: 'HD', jpegThumbnail: thumb2 } },
+      participant: '0@s.whatsapp.net'
+    }
+  } catch {
+    return undefined
+  }
 }
 
-handler.command = ['hd', 'remini', 'enhance']
-handler.help = ['hd', 'remini', 'enhance']
+const handler = async (m, { conn, args, usedPrefix, command }) => {
+  let q = m.quoted || m
+  let mime = (q.msg || q).mimetype || q.mediaType || ''
+  const fancyQuoted = await makeFkontak()
+  const quotedContact = fancyQuoted || m
+
+  if (!mime || !/image\/(jpe?g|png)/i.test(mime)) {
+    const quotedContext = m.message?.extendedTextMessage?.contextInfo?.quotedMessage
+    const quotedImage = quotedContext?.imageMessage
+    
+    if (quotedImage) {
+      q = {
+        message: { imageMessage: quotedImage },
+        download: async () => conn.downloadMediaMessage({ key: {}, message: { imageMessage: quotedImage } })
+      }
+      mime = quotedImage.mimetype || 'image/jpeg'
+    }
+  }
+
+  if (!mime || !/image\/(jpe?g|png)/i.test(mime)) {
+    return conn.reply(m.chat, `> ⓘ \`Envía o responde a una imagen JPG/PNG\`\n> ⓘ *Uso:* \`${usedPrefix}${command} [2|4|8]\``, quotedContact)
+  }
+
+  let buffer
+  try {
+    buffer = await (q.download?.() || conn.downloadMediaMessage(q))
+  } catch (err) {
+    return conn.reply(m.chat, `> 🌱 \`No se pudo descargar la imagen:\` *${err.message || err}*`, quotedContact)
+  }
+
+  if (!buffer) {
+    return conn.reply(m.chat, '> 🌵 \`No se pudo obtener la imagen\`', quotedContact)
+  }
+
+  const scale = parseScale(args)
+  if (!VALID_SCALES.has(scale)) {
+    return conn.reply(m.chat, `> ⓘ \`Escala inválida.\`.*`, quotedContact)
+  }
+
+  await m.react?.('🕑')
+  try {
+    const result = await upscaleWithIloveimg({
+      buffer,
+      fileName: pickFileName(mime, scale),
+      mimeType: /png/i.test(mime) ? 'image/png' : 'image/jpeg',
+      scale
+    })
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        image: result.buffer,
+        mimetype: result.contentType || (/png/i.test(result.fileName) ? 'image/png' : 'image/jpeg'),
+        caption: `> 👻 \`Imagen mejorada\` *x${scale}*`,
+        fileName: result.fileName
+      },
+      { quoted: quotedContact }
+    )
+    await m.react?.('✅')
+  } catch (err) {
+    await m.react?.('❌')
+    const errMsg = err?.response?.status
+      ? `\`Error ${err.response.status}:\` *${err.response.statusText}*`
+      : `\`${err?.message || 'Error desconocido'}\``
+    return conn.reply(m.chat, `> ⓘ \`Fallo al usar la api:\` *${errMsg}*`, quotedContact)
+  }
+}
+
+handler.help = ['hd']
 handler.tags = ['herramientas']
+handler.command = ['hd']
 
 export default handler
-
-async function uploadToUguu(buffer) {
-  const body = new FormData()
-  body.append('files[]', buffer, 'image.jpg')
-
-  const res = await fetch('https://uguu.se/upload.php', {
-    method: 'POST',
-    body,
-    headers: body.getHeaders()
-})
-
-  const text = await res.text()
-  try {
-    const json = JSON.parse(text)
-    const url = json.files?.[0]?.url
-    if (!url ||!url.startsWith('https://')) throw new Error(`Respuesta inválida de Uguu.\n> ${text}`)
-    return url.trim()
-} catch (e) {
-    throw new Error(`Falló al parsear respuesta de Uguu.\n> ${text}`)
-}
-}
-
-async function upscaleSiputzx(url) {
-  const res = await fetch(`${global.APIs.siputzx.url}/api/iloveimg/upscale?image=${encodeURIComponent(url)}&scale=4`)
-  if (!res.ok) throw new Error(`Siputzx falló con código ${res.status}`)
-  return Buffer.from(await res.arrayBuffer())
-}
-upscaleSiputzx.engineName = 'Siputzx'
-
-async function upscaleVreden(url) {
-  const res = await fetch(`${global.APIs.vreden.url}/api/artificial/hdr?url=${encodeURIComponent(url)}&pixel=4`)
-  if (!res.ok) throw new Error(`Vreden falló con código ${res.status}`)
-  const json = await res.json()
-
-  const finalUrl = json?.resultado?.datos?.descargaUrls?.[0]
-  if (!finalUrl || typeof finalUrl!== 'string' ||!finalUrl.startsWith('https://')) {
-    throw new Error('Respuesta inválida de Vreden: no se encontró una URL válida.')
-}
-
-  return finalUrl
-}
-upscaleVreden.engineName = 'Vreden'
