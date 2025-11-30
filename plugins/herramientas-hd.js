@@ -37,7 +37,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     const json = await res.json()
 
     if (!json?.result_url || !json.result_url.startsWith('http')) {
-      throw new Error('\`🌵 Ocurrió un error al mejorar la imagen\`')
+      throw new Error('\`🌱 Ocurrió un error al mejorar la imagen\`')
     }
 
     const resultBuffer = await (await fetch(json.result_url)).buffer()
@@ -45,15 +45,14 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     await conn.sendMessage(m.chat, {
       image: resultBuffer,
       caption: `
-> 🪴 La imagen ya tiene hd
-> Si la imagen no tiene calidad reenvíe el comando *${usedPrefix}hd*
+> \`ⓘ Imagen mejorada:\`
 `.trim()
     }, { quoted: m })
 
     await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
   } catch (err) {
     await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
-    m.reply(`\`🪴 Falló la mejora de imagen:\`\n${err.message || err}`)
+    m.reply(`\`🌵 Falló la mejora de imagen:\`\n${err.message || err}`)
   }
 }
 
