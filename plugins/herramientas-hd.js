@@ -1,112 +1,64 @@
-import { upscaleWithIloveimg, VALID_SCALES } from '../lib/iloveimgUpscale.js'
+import fetch from 'node-fetch'
+import FormData from 'form-data'
 
-function parseScale(args = []) {
-  for (let i = 0; i < args.length; i += 1) {
-    const token = args[i]
-    if (!token) continue
+let handler = async (m, { conn, usedPrefix, command }) => {
+  const quoted = m.quoted ? m.quoted : m
+  const mime = quoted.mimetype || quoted.msg?.mimetype || ''
 
-    const direct = token.match(/^([248])(?:x)?$/i)
-    if (direct) return Number(direct[1])
-
-    const flag = token.match(/^--?(?:scale|x)(?:=(\d+))?$/i)
-    if (flag) {
-      if (flag[1]) return Number(flag[1])
-      const next = args[i + 1]
-      if (next && /^\d+$/.test(next)) return Number(next)
-    }
+  if (!/image\/(jpe?g|png)/i.test(mime)) {
+    await conn.sendMessage(m.chat, { react: { text: '❗', key: m.key } })
+    return m.reply(`> \`ⓘ Por favor envíe una imagen.\``)
   }
-  return 2
-}
 
-function pickFileName(mime, scale) {
-  if (/png/i.test(mime)) return `iloveimg_x${scale}.png`
-  return `iloveimg_x${scale}.jpg`
-}
-
-async function makeFkontak() {
   try {
-    const res = await fetch('https://i.postimg.cc/pLh4hJ7D/download-(1)-(1).png')
-    const thumb2 = Buffer.from(await res.arrayBuffer())
-    return {
-      key: { participants: '0@s.whatsapp.net', remoteJid: 'status@broadcast', fromMe: false, id: 'Halo' },
-      message: { locationMessage: { name: 'HD', jpegThumbnail: thumb2 } },
-      participant: '0@s.whatsapp.net'
+    await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } })
+
+    const media = await quoted.download()
+    const ext = mime.split('/')[1]
+    const filename = `mejorada_${Date.now()}.${ext}`
+
+    const form = new FormData()
+    form.append('image', media, { filename, contentType: mime })
+    form.append('scale', '2')
+
+    const headers = {
+      ...form.getHeaders(),
+      'accept': 'application/json',
+      'x-client-version': 'web',
+      'x-locale': 'es'
     }
-  } catch {
-    return undefined
-  }
-}
 
-const handler = async (m, { conn, args, usedPrefix, command }) => {
-  let q = m.quoted || m
-  let mime = (q.msg || q).mimetype || q.mediaType || ''
-  const fancyQuoted = await makeFkontak()
-  const quotedContact = fancyQuoted || m
-
-  if (!mime || !/image\/(jpe?g|png)/i.test(mime)) {
-    const quotedContext = m.message?.extendedTextMessage?.contextInfo?.quotedMessage
-    const quotedImage = quotedContext?.imageMessage
-    
-    if (quotedImage) {
-      q = {
-        message: { imageMessage: quotedImage },
-        download: async () => conn.downloadMediaMessage({ key: {}, message: { imageMessage: quotedImage } })
-      }
-      mime = quotedImage.mimetype || 'image/jpeg'
-    }
-  }
-
-  if (!mime || !/image\/(jpe?g|png)/i.test(mime)) {
-    return conn.reply(m.chat, `> ⓘ \`Envía o responde a una imagen JPG/PNG\`\n> ⓘ *Uso:* \`${usedPrefix}${command} [2|4|8]\``, quotedContact)
-  }
-
-  let buffer
-  try {
-    buffer = await (q.download?.() || conn.downloadMediaMessage(q))
-  } catch (err) {
-    return conn.reply(m.chat, `> 🌱 \`No se pudo descargar la imagen:\` *${err.message || err}*`, quotedContact)
-  }
-
-  if (!buffer) {
-    return conn.reply(m.chat, '> 🌵 \`No se pudo obtener la imagen\`', quotedContact)
-  }
-
-  const scale = parseScale(args)
-  if (!VALID_SCALES.has(scale)) {
-    return conn.reply(m.chat, `> ⓘ \`Escala inválida.\`.*`, quotedContact)
-  }
-
-  await m.react?.('🕑')
-  try {
-    const result = await upscaleWithIloveimg({
-      buffer,
-      fileName: pickFileName(mime, scale),
-      mimeType: /png/i.test(mime) ? 'image/png' : 'image/jpeg',
-      scale
+    const res = await fetch('https://api2.pixelcut.app/image/upscale/v1', {
+      method: 'POST',
+      headers,
+      body: form
     })
 
-    await conn.sendMessage(
-      m.chat,
-      {
-        image: result.buffer,
-        mimetype: result.contentType || (/png/i.test(result.fileName) ? 'image/png' : 'image/jpeg'),
-        caption: `> 👻 \`Imagen mejorada\` *x${scale}*`,
-        fileName: result.fileName
-      },
-      { quoted: quotedContact }
-    )
-    await m.react?.('✅')
+    const json = await res.json()
+
+    if (!json?.result_url || !json.result_url.startsWith('http')) {
+      throw new Error('\`🌵 Ocurrió un error al mejorar la imagen\`')
+    }
+
+    const resultBuffer = await (await fetch(json.result_url)).buffer()
+
+    await conn.sendMessage(m.chat, {
+      image: resultBuffer,
+      caption: `
+> 🪴 La imagen ya tiene hd
+> Si la imagen no tiene calidad reenvíe el comando *${usedPrefix}hd*
+`.trim()
+    }, { quoted: m })
+
+    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
   } catch (err) {
-    await m.react?.('❌')
-    const errMsg = err?.response?.status
-      ? `\`Error ${err.response.status}:\` *${err.response.statusText}*`
-      : `\`${err?.message || 'Error desconocido'}\``
-    return conn.reply(m.chat, `> ⓘ \`Fallo al usar la api:\` *${errMsg}*`, quotedContact)
+    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
+    m.reply(`\`🪴 Falló la mejora de imagen:\`\n${err.message || err}`)
   }
 }
 
 handler.help = ['hd']
 handler.tags = ['herramientas']
-handler.command = ['hd']
+handler.command = ['mejorar', 'hd'];
 
 export default handler
